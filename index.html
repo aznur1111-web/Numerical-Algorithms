@@ -1,0 +1,1571 @@
+<!doctype html><html lang="en" data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><meta name="description" content="AZNUR Numerical Lab, a single-file course for numerical algorithms"><title>AZNUR Numerical Lab</title>
+<style>
+:root{color-scheme:light;--bg:#fafafa;--panel:#fff;--panel2:#f7f8fa;--panel3:#f1f4f7;--line:#e1e6ed;--line2:#cbd4df;--text:#1d2733;--muted:#586779;--subtle:#718096;--accent:#f59e0b;--strong:#8a4b08;--good:#16734b;--warn:#946200;--bad:#c73545;--blue:#3b82f6;--purple:#8b5cf6;--cyan:#0891b2;--shadow:0 8px 24px rgba(20,35,50,.05);--radius:13px}
+:root[data-theme=dark]{color-scheme:dark;--bg:#111722;--panel:#192230;--panel2:#202b3a;--panel3:#141c27;--line:#2c394b;--line2:#3b4b61;--text:#e8eef7;--muted:#a7b4c7;--subtle:#8190a5;--accent:#f59e0b;--strong:#ffd78a;--good:#9ed7bd;--warn:#edc477;--bad:#ff929e;--blue:#60a5fa;--purple:#a78bfa;--cyan:#22d3ee;--shadow:none}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);background-image:linear-gradient(to right,color-mix(in srgb,var(--line) 26%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--line) 26%,transparent) 1px,transparent 1px);background-size:24px 24px;color:var(--text);font:15px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}button,a,select{touch-action:manipulation}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}a{color:var(--accent);text-decoration:none}.muted{color:var(--muted)}.mono,code,pre,textarea{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.topbar{height:64px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:0 22px;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text)}.brand-mark{width:34px;height:34px;border:1px solid var(--line2);border-radius:10px;background:var(--panel2);display:grid;place-items:center;color:var(--strong);font-weight:850;font-size:15px}.brand strong{display:block;font-size:14px;line-height:1.2}.brand small{display:block;font-size:10px;letter-spacing:.14em;color:var(--muted);margin-top:2px}
+.top-meta{flex:1;color:var(--subtle);font-size:12px;letter-spacing:.02em}
+.top-actions{display:flex;align-items:center;gap:7px}.top-actions label{font-size:11px;color:var(--muted)}
+select,.btn{border:1px solid var(--line2);background:var(--panel3);color:var(--text);border-radius:8px;padding:8px 11px;font-size:12px}.btn{font-weight:600;white-space:nowrap}.btn:hover{border-color:var(--accent);color:var(--strong)}.btn.primary{background:var(--accent);color:#1b2430;border-color:var(--accent)}:root[data-theme=dark] .btn.primary{color:#1b2430}
+.layout{display:grid;grid-template-columns:264px minmax(420px,1fr);max-width:1500px;margin:auto;min-height:calc(100vh - 64px)}
+.sidebar{position:sticky;top:64px;height:calc(100vh - 64px);overflow:auto;border-right:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column}
+.side-title{display:flex;justify-content:space-between;color:var(--subtle);font-size:10px;letter-spacing:.14em;font-weight:800;padding:0 4px 12px}
+.pill,.tag{border:1px solid var(--line2);border-radius:6px;padding:3px 7px;font-size:10px;color:var(--muted);white-space:nowrap}
+.search{display:flex;gap:7px;align-items:center;border:1px solid var(--line);border-radius:9px;background:var(--panel3);height:39px;padding:0 10px;margin-bottom:10px}
+.search input{min-width:0;width:100%;background:transparent;border:0;outline:0;color:var(--text);font-size:12px}
+.search kbd{border:1px solid var(--line);border-radius:4px;padding:1px 5px;color:var(--subtle);font-size:10px}
+.filter{display:block;color:var(--subtle);font-size:11px;margin-bottom:12px}.filter select{display:block;width:100%;max-width:none;margin-top:5px;padding:7px}
+.tree{display:flex;flex-direction:column;gap:12px}
+.group-label{display:flex;justify-content:space-between;color:var(--subtle);font-size:10px;font-weight:800;letter-spacing:.08em;padding:4px 5px}
+.link{width:100%;text-align:left;display:flex;gap:8px;align-items:center;background:transparent;border:1px solid transparent;color:var(--muted);padding:7px 8px;border-radius:8px;min-height:34px}
+.link .num{font:10px ui-monospace,monospace;color:var(--subtle);width:19px;flex:none}
+.link .name{font-size:12px;flex:1}.link .done{color:var(--good)}
+.link:hover{background:var(--panel2);color:var(--text)}
+.link.active{background:var(--panel2);border-color:var(--line2);color:var(--strong)}
+.side-foot{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}
+.progress-row{display:flex;justify-content:space-between;color:var(--subtle);font-size:11px;margin-bottom:7px}
+.progress{height:5px;background:var(--panel2);border-radius:9px;overflow:hidden}.progress>div{height:100%;width:0;background:var(--accent);transition:width .25s}
+.side-actions{display:flex;gap:6px;margin-top:12px}.side-actions .btn{flex:1;padding:7px;font-size:11px}
+main{max-width:920px;width:100%;min-width:0;margin:auto;padding:28px 30px 40px}
+.breadcrumb{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--subtle);margin-bottom:16px}
+.header{padding:2px 2px 22px;border-bottom:1px solid var(--line);margin-bottom:20px}
+.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.13em;font-weight:800;color:var(--accent);margin-bottom:9px}
+.header h1{font-size:clamp(27px,3vw,36px);line-height:1.12;letter-spacing:-.035em;margin:0 0 10px;font-weight:700}
+.header p{font-size:14.5px;color:var(--muted);margin:0 0 14px;max-width:740px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag.good{color:var(--good)}.tag.warn{color:var(--warn)}
+.header-actions{display:flex;gap:7px;margin-top:16px;flex-wrap:wrap}
+.panel{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow)}
+.panel-head{padding:18px 20px 0}.panel-head h2{font-size:15px;margin:0 0 4px;letter-spacing:-.01em;font-weight:650}.panel-head p{font-size:12.5px;color:var(--muted);margin:0}
+.body{padding:16px 20px 20px}
+.idea{display:grid;grid-template-columns:minmax(0,1fr) 210px;gap:20px}
+.idea p{font-size:13.5px;color:var(--muted);margin:0 0 13px}
+.mental{background:var(--panel3);border:1px solid var(--line);border-radius:10px;padding:13px}
+.mental small{color:var(--subtle);font-size:10px;letter-spacing:.11em;text-transform:uppercase}
+.mental strong{display:block;margin:6px 0;font-size:13px;color:var(--strong)}
+.mental p{font-size:12px;color:var(--muted);margin:0}
+.takeaway{padding:11px 13px;border:1px solid var(--line2);background:var(--panel3);border-radius:8px;color:var(--strong);font-size:12.5px;line-height:1.6}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.mini{background:var(--panel3);border:1px solid var(--line);border-radius:10px;padding:13px}
+.mini h3{font-size:12px;margin:0 0 7px;font-weight:650}
+.mini p{font-size:12.5px;color:var(--muted);margin:0;line-height:1.6}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.steps li{counter-increment:s;display:flex;gap:10px;color:var(--muted);font-size:12.5px;line-height:1.55}
+.steps li:before{content:counter(s);width:23px;height:23px;flex:none;display:grid;place-items:center;border:1px solid var(--line2);background:var(--panel3);border-radius:6px;color:var(--accent);font:11px ui-monospace,monospace}
+.pseudo{white-space:pre-wrap;overflow:auto;background:var(--panel3);border:1px solid var(--line);border-radius:10px;padding:14px;font:12px/1.75 ui-monospace,monospace;color:var(--strong);margin:0}
+.table-wrap{overflow:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{border-bottom:1px solid var(--line);text-align:left;padding:9px 10px;vertical-align:top}
+th{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--subtle);font-weight:700}
+td{color:var(--muted)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{padding:12px;background:var(--panel3);border:1px solid var(--line);border-radius:9px}
+.tile span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--subtle)}
+.tile strong{display:block;color:var(--strong);font:700 14px ui-monospace,monospace;margin-top:6px}
+.tile small{font-size:10.5px;color:var(--muted);display:block;margin-top:2px}
+.notice{padding:12px 13px;background:var(--panel3);border:1px solid color-mix(in srgb,var(--warn) 35%,var(--line));border-radius:9px;font-size:12.5px;color:var(--muted);line-height:1.65}
+.notice strong{color:var(--warn)}
+.notice.info{border-color:var(--line2)}.notice.info strong{color:var(--accent)}
+.lab-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lab-top label{font-size:11.5px;color:var(--muted)}
+.lab-input{width:100%;min-height:80px;resize:vertical;background:var(--panel3);border:1px solid var(--line2);border-radius:9px;padding:11px;color:var(--text);font:12px/1.65 ui-monospace,monospace;margin:11px 0}
+.lab-output{padding:13px;background:var(--panel3);border:1px solid var(--line);border-radius:9px;min-height:70px;white-space:pre-wrap;overflow-wrap:anywhere;color:var(--strong);font:12px/1.75 ui-monospace,monospace;overflow-x:auto}
+.lab-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.label{font-size:10px;color:var(--subtle);font-weight:800;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+.code-head{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:11px 13px;background:var(--panel3);border-bottom:1px solid var(--line)}
+.code-editor{display:block;width:100%;min-height:220px;resize:vertical;border:0;border-radius:0;background:var(--panel3);color:var(--text);padding:15px;font:12px/1.7 ui-monospace,monospace;outline:0}
+.code-foot{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:9px 13px;color:var(--subtle);font-size:10px;border-top:1px solid var(--line)}
+.practice{border:1px solid var(--line);background:var(--panel3);border-radius:9px;padding:13px}
+.practice summary{cursor:pointer;font-size:12.5px;font-weight:600}
+.practice p{font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.65}
+.references{display:flex;flex-direction:column;gap:8px}
+.references a{font-size:12.5px;overflow-wrap:anywhere}
+.home-hero{padding:30px;background:linear-gradient(150deg,var(--panel),var(--panel3));border:1px solid var(--line);border-radius:14px;margin-bottom:16px}
+.home-hero h1{font-size:clamp(30px,3.6vw,42px);line-height:1.1;letter-spacing:-.04em;margin:8px 0 14px;font-weight:700}
+.home-hero p{color:var(--muted);font-size:14px;max-width:720px;margin:0 0 18px;line-height:1.65}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.stat strong{display:block;font:700 22px ui-monospace,monospace;color:var(--strong)}
+.stat span{display:block;font-size:10.5px;color:var(--muted);margin-top:3px}
+.chapter-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chapter-card{padding:14px;text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:var(--text)}
+.chapter-card:hover{border-color:var(--accent)}
+.chapter-card .num{font-size:10px;color:var(--accent);letter-spacing:.09em;font-weight:800}
+.chapter-card strong{display:block;font-size:13px;margin:5px 0;font-weight:650}
+.chapter-card p{font-size:11.5px;color:var(--muted);margin:0;line-height:1.55}
+.toast{position:fixed;z-index:99;bottom:20px;left:50%;transform:translate(-50%,10px);opacity:0;pointer-events:none;background:var(--panel);border:1px solid var(--line2);border-radius:9px;padding:11px 15px;box-shadow:var(--shadow);font-size:12px;transition:opacity .14s,transform .14s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.footer{font-size:10.5px;color:var(--subtle);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:6px 2px 14px;align-items:center}
+.plot{width:100%;height:auto;display:block;background:var(--bg);border:1px solid var(--line);border-radius:8px;margin:6px 0}
+@media(max-width:1080px){.layout{grid-template-columns:240px minmax(360px,1fr)}main{padding:24px 22px 36px}}
+@media(max-width:840px){.topbar{height:auto;min-height:60px;flex-wrap:wrap;gap:10px;padding:10px 14px}.top-meta{display:none}.top-actions{margin-left:auto}.top-actions label{display:none}.layout{display:block}.sidebar{position:static;height:auto;max-height:none;border:0;border-bottom:1px solid var(--line);padding:14px}.tree{max-height:260px;overflow:auto}.side-foot{display:none}main{padding:20px 15px 32px}.idea{grid-template-columns:1fr}.mental{order:-1}.stats{grid-template-columns:1fr 1fr}.chapter-cards,.two,.lab-cols{grid-template-columns:1fr}}
+@media(max-width:520px){.brand small{display:none}.brand-mark{width:30px;height:30px}.brand strong{font-size:12px}.top-actions select{max-width:92px;padding:6px;font-size:10px}.top-actions .btn{padding:6px 8px;font-size:10px}.chapter-cards{grid-template-columns:1fr}.tiles{grid-template-columns:1fr}.home-hero{padding:20px}.home-hero h1{font-size:30px}.header h1{font-size:27px}.body,.panel-head{padding-left:15px;padding-right:15px}.footer{display:block}.footer span{display:block;margin-bottom:6px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+@media print{.topbar,.sidebar,.header-actions,.lab-top,.btn,.toast{display:none!important}.layout{display:block}main{padding:0;max-width:none}.panel,.home-hero{break-inside:avoid;box-shadow:none}body{background:#fff;background-image:none;color:#111}}
+</style></head><body>
+
+<header class="topbar">
+  <a class="brand" href="#home" id="homeLink"><span class="brand-mark">Az</span><span><strong>AZNUR Numerical Lab</strong><small>NUMERICAL ALGORITHMS</small></span></a>
+  <div class="top-meta" id="catalogCount"></div>
+  <div class="top-actions">
+    <label for="themeSelect">Theme</label>
+    <select id="themeSelect" aria-label="Theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select>
+    <button class="btn" id="printBtn">Print / PDF</button>
+    <button class="btn" id="exportBtn">Export</button>
+    <button class="btn" id="importBtn">Import</button>
+    <input type="file" id="importFile" accept="application/json,.json" hidden>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="Course navigation">
+    <div class="side-title"><span>COURSE CATALOG</span><span class="pill" id="lessonCount">0</span></div>
+    <div class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Search numerical topics…" aria-label="Search lessons"><kbd>/</kbd></div>
+    <label class="filter">Chapter<select id="chapterFilter"><option value="all">All chapters</option></select></label>
+    <nav class="tree" id="courseTree" aria-label="Lessons"></nav>
+    <div class="side-foot">
+      <div class="progress-row"><span>COURSE PROGRESS</span><strong id="progressText">0 / 0</strong></div>
+      <div class="progress" id="progressBar" role="progressbar" aria-label="Course progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progressFill"></div></div>
+      <div class="side-actions"><button class="btn" data-page="home">Home</button><button class="btn" data-page="progress">Progress</button></div>
+    </div>
+  </aside>
+  <main id="mainView" tabindex="-1" aria-live="polite"></main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   AZNUR Numerical Lab
+   ============================================================ */
+const CHAPTERS=[
+ {id:"floating",title:"1. Floating-point basics",desc:"IEEE 754, rounding, cancellation, overflow, underflow, error propagation and condition numbers.",ids:["ieee754","cancellation","error-propagation"]},
+ {id:"stable",title:"2. Stable computation",desc:"Kahan summation, pairwise summation, compensated products and interval arithmetic.",ids:["kahan","pairwise","interval"]},
+ {id:"roots",title:"3. Root finding",desc:"Bisection, false position, Newton-Raphson, secant and Brent's method.",ids:["bisection","newton","secant","brent"]},
+ {id:"nonlinear",title:"4. Nonlinear systems",desc:"Fixed-point iteration, Broyden, Gauss-Newton and Levenberg-Marquardt.",ids:["fixed-point","broyden","gauss-newton"]},
+ {id:"interp",title:"5. Interpolation and approximation",desc:"Linear and spline interpolation, Chebyshev, barycentric and Remez.",ids:["linear-spline","chebyshev","barycentric-remez"]},
+ {id:"diffint",title:"6. Numerical differentiation and integration",desc:"Finite differences, complex-step, Richardson, trapezoid, Simpson, Gaussian quadrature.",ids:["finite-differences","richardson","trapezoid-simpson","gaussian-quad"]},
+ {id:"poly",title:"7. Polynomial algorithms",desc:"Horner, Sturm sequences, Jenkins-Traub, polynomial GCD, root isolation.",ids:["horner","sturm","jenkins-traub"]},
+ {id:"special",title:"8. Special functions and approximations",desc:"CORDIC, Lanczos gamma, minimax and rational approximation.",ids:["cordic","lanczos","minimax"]},
+ {id:"ode",title:"9. ODE solvers",desc:"Euler, midpoint, RK4, adaptive RK, Dormand-Prince, implicit Euler, symplectic integrators.",ids:["euler","rk4","dormand-prince","symplectic"]},
+ {id:"pde",title:"10. PDE and boundary problems",desc:"Finite difference, finite volume, finite element, Crank-Nicolson, multigrid, CFL condition.",ids:["finite-difference-pde","crank-nicolson","cfl-multigrid"]},
+ {id:"signal",title:"11. Signal and large-scale methods",desc:"FFT, split-radix, Good-Thomas, sparse FFT, automatic differentiation and mixed precision.",ids:["fft","split-radix","autodiff-mixed"]}
+];
+
+const D={
+ kind:"Concept",status:"Concept lesson",level:2,demo:"none",demoTitle:"Interactive teaching lab",refs:[],codeKey:"generic",
+ input:"Numeric data, functions or matrices plus the parameters of the method.",
+ output:"A numeric approximation with an error estimate.",
+ invariant:"The method's accuracy depends on the mathematical properties of the problem. Breaking them gives wrong answers without an error.",
+ complexity:["Depends on the problem and tolerance","Depends on the method","Measure on representative problems"],
+ uses:"Use this as one layer inside a larger numerical or scientific pipeline.",
+ strength:"Fits the problem when its assumptions hold.",
+ limits:"Depends on conditioning, dimension and floating-point arithmetic.",
+ pitfall:"Floating-point is not exact. Always check residuals and condition numbers.",
+ question:"What is the main idea of this lesson?",
+ trace:null
+};
+function mk(o){
+ const steps=o.steps||["Read the input.","Apply the method.","Produce the approximation.","Check the residual."];
+ return Object.assign({},D,{
+  summary:o.summary||"",
+  mental:o.mental||o.title,
+  mentalText:o.mentalText||o.summary||"",
+  problem:o.problem||("How does "+o.title+" work and when is it the right choice?"),
+  steps:steps,
+  trace:o.trace||steps.map((s,i)=>["Step "+(i+1),s,i===steps.length-1?"Verified":"Step done"]),
+  answer:o.answer||o.summary||"",
+  pseudo:o.pseudo||"",
+  sample:o.sample||"",
+  level:o.level||2
+ },o);
+}
+
+const RAW=[
+/* Ch 1 */
+{id:"ieee754",title:"IEEE 754 floating point",level:2,kind:"Foundation",status:"Runnable teaching lab",
+ summary:"IEEE 754 stores a real number as a sign, a biased exponent and a fraction. Double precision uses 64 bits: 1 sign, 11 exponent, 52 fraction. Float32 uses 1 + 8 + 23.",
+ mental:"Scientific notation in binary",
+ mentalText:"A number is sign times (1 + fraction) times 2 to the exponent minus bias. The mantissa carries significant digits; the exponent carries range.",
+ steps:["Normalize the value to 1.f x 2^e.","Add the bias to the exponent.","Store sign, biased exponent and fraction.","Handle special cases: zero, subnormal, infinity, NaN."],
+ pseudo:"Float64 layout:  sign(1) | exponent(11) | fraction(52)\nFloat32 layout:  sign(1) | exponent(8)  | fraction(23)\n\nvalue = (-1)^s * (1 + f) * 2^(e - bias)\nbias32 = 127, bias64 = 1023\n\nSpecial values:\n  exponent all zeros, fraction all zeros: signed zero\n  exponent all zeros, fraction nonzero: subnormal\n  exponent all ones, fraction all zeros: infinity\n  exponent all ones, fraction nonzero: NaN\n\nMachine epsilon:\n  2^-52 ~ 2.22e-16 for float64\n  the gap between 1.0 and the next representable number",
+ uses:"Every float computation. Understanding it prevents many bugs.",
+ strength:"Wide dynamic range with a fixed size.",
+ limits:"Only about 15 to 17 significant decimal digits for float64.",
+ pitfall:"0.1 is not exactly representable. Summing many 0.1 values accumulates error.",
+ question:"What is the machine epsilon for float64?",
+ answer:"About 2.22 x 10^-16. It is the gap between 1.0 and the next representable float.",
+ demo:"ieee754",sample:"0.1\n1.0\n1e308\n1e-320",refs:[
+  ["IEEE 754-2019 Standard for Floating-Point Arithmetic","https://ieeexplore.ieee.org/document/8766229"],
+  ["Goldberg, What Every Computer Scientist Should Know About Floating-Point Arithmetic, ACM Computing Surveys 1991","https://doi.org/10.1145/103162.103163"],
+  ["Higham, Accuracy and Stability of Numerical Algorithms, SIAM 2002","https://epubs.siam.org/doi/book/10.1137/1.9780898718027"]]},
+{id:"cancellation",title:"Rounding, cancellation and conditioning",level:3,kind:"Foundation",status:"Runnable teaching lab",
+ summary:"Catastrophic cancellation occurs when two nearly equal numbers are subtracted, destroying significant digits. Conditioning describes how sensitive the result is to input perturbations.",
+ mental:"Subtracting close numbers leaves nothing but noise",
+ mentalText:"If a and b agree in the first 15 digits, a - b has only the last few digits of information. The subtraction amplifies the relative error.",
+ steps:["Identify subtractions of nearly equal numbers.","Estimate the relative error growth.","Rephrase the computation to avoid cancellation.","Check the condition number of the problem."],
+ pseudo:"Catastrophic cancellation:\n  if a and b agree to k digits,\n  a - b has only about 15 - k reliable digits.\n\nExample:\n  x = 1e15, y = 1e15 - 1\n  (x - y) computed in float64 gives 1 (correct)\n  but (1 + 1e-15) - 1 gives 1.1102e-16\n  (the 1e-15 is lost before subtraction)\n\nRephrasing examples:\n  sqrt(x+1) - sqrt(x) = 1 / (sqrt(x+1) + sqrt(x))\n  (1 - cos x) / x^2 = 2 sin^2(x/2) / x^2\n  quadratic formula stable variant\n\nCondition number of a problem:\n  kappa = |relative error in output| / |relative error in input|",
+ uses:"Numerical library design, scientific computing, evaluating formulas near singularities.",
+ strength:"Explains why equivalent formulas give different accuracy.",
+ limits:"Diagnosis requires knowing the input range.",
+ pitfall:"Using the standard quadratic formula on a quadratic with one small root destroys accuracy. Use the stable variant.",
+ question:"Why is (1 - cos x) / x^2 inaccurate for small x?",
+ answer:"cos x is close to 1, so 1 - cos x cancels. The stable form is 2 sin^2(x/2) / x^2.",
+ demo:"cancellation",sample:"1e-8",refs:[
+  ["Higham, Accuracy and Stability of Numerical Algorithms","https://epubs.siam.org/doi/book/10.1137/1.9780898718027"],
+  ["Kahan, Further remarks on reducing truncation errors, CACM 1965","https://doi.org/10.1145/363707.363723"],
+  ["Wikipedia, Catastrophic cancellation","https://en.wikipedia.org/wiki/Catastrophic_cancellation"]]},
+{id:"error-propagation",title:"Error propagation and condition numbers",level:3,kind:"Foundation",status:"Runnable teaching lab",
+ summary:"Errors in inputs propagate through a computation. Forward error is the error in the output. Backward error is the perturbation of the input that would give the computed output.",
+ mental:"Small input errors amplified or damped by the algorithm",
+ mentalText:"A well-conditioned problem damps small input errors. An ill-conditioned problem amplifies them.",
+ steps:["Estimate the forward error.","Estimate the backward error.","Compute the condition number.","Compare forward error with condition number times backward error."],
+ pseudo:"Absolute forward error:\n  |x_hat - x|\n\nRelative forward error:\n  |x_hat - x| / |x|\n\nCondition number of a scalar function f:\n  kappa = |x f'(x) / f(x)|\n\nRule of thumb:\n  forward_error <= kappa * backward_error\n\nWilkinson's rule:\n  A well-conditioned algorithm has backward error\n  on the order of machine epsilon times the problem size.\n\nMatrix problems:\n  kappa(A) = ||A|| * ||A^-1||\n  bounds the relative error when solving A x = b",
+ uses:"Numerical linear algebra, root finding, ODE solvers, evaluating formula accuracy.",
+ strength:"Separates algorithm stability from problem conditioning.",
+ limits:"Condition numbers can be expensive to compute exactly.",
+ pitfall:"A stable algorithm on an ill-conditioned problem can still give inaccurate results. The problem itself limits accuracy.",
+ question:"What is the difference between forward and backward error?",
+ answer:"Forward error measures how far the computed answer is from the true answer. Backward error measures how much the input would have to change to make the computed answer exact.",
+ demo:"error-propagation",sample:"10.0",refs:[
+  ["Wilkinson, Rounding Errors in Algebraic Processes, Prentice Hall 1963","https://archive.org/details/roundingerrorsi0000wilk"],
+  ["Higham, Accuracy and Stability of Numerical Algorithms","https://epubs.siam.org/doi/book/10.1137/1.9780898718027"],
+  ["Trefethen and Bau, Numerical Linear Algebra, SIAM 1997","https://www.siam.org/Publications/Books/Book-Details/numerical-linear-algebra"]]},
+/* Ch 2 */
+{id:"kahan",title:"Kahan and Neumaier summation",level:3,kind:"Numerical stability",status:"Runnable teaching lab",
+ summary:"Kahan summation tracks a running compensation for the rounding error lost at each step. Neumaier summation extends it to handle the case where the new term is larger than the running sum.",
+ mental:"Keep a second accumulator for the lost low-order bits",
+ mentalText:"When you add a small number to a large sum, the low bits are lost. Kahan saves them in a separate variable and adds them later.",
+ steps:["Initialize sum = 0, c = 0.","For each x: y = x - c; t = sum + y; c = (t - sum) - y; sum = t.","Report sum at the end.","Neumaier: also check which operand was larger to choose the correction."],
+ pseudo:"Kahan summation:\n  sum = 0.0\n  c = 0.0\n  for x in data:\n    y = x - c\n    t = sum + y\n    c = (t - sum) - y\n    sum = t\n  return sum\n\nCompensated error bound:\n  O(eps) instead of O(n * eps)\n\nNeumaier variant:\n  sum = 0.0\n  c = 0.0\n  for x in data:\n    t = sum + x\n    if |sum| >= |x|:\n      c += (sum - t) + x\n    else:\n      c += (x - t) + sum\n    sum = t\n  return sum + c\n\nNeumaier handles the case where the new term\nis larger than the running sum.",
+ uses:"Numerical libraries, high-precision accumulation, statistics, financial calculations.",
+ strength:"Reduces summation error from O(n eps) to O(eps). Simple and fast.",
+ limits:"Still not exact. Cannot recover bits already lost before the accumulator.",
+ pitfall:"Kahan's correction needs the compiler to not reassociate floats. With -ffast-math it may be optimized away.",
+ question:"When is Neumaier summation preferred over Kahan?",
+ answer:"When the data includes large values followed by small values. Kahan can lose the small values; Neumaier handles that case.",
+ demo:"kahan",sample:"1e16\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n-1e16",refs:[
+  ["Kahan, Further remarks on reducing truncation errors, CACM 1965","https://doi.org/10.1145/363707.363723"],
+  ["Neumaier, Rundungsfehleranalyse einiger Verfahren zur Summation endlicher Summen, ZAMM 1974","https://doi.org/10.1002/zamm.19740540106"],
+  ["Higham, Section 4.3 Summation","https://epubs.siam.org/doi/book/10.1137/1.9780898718027"]]},
+{id:"pairwise",title:"Pairwise and cascade summation",level:3,kind:"Numerical stability",status:"Runnable teaching lab",
+ summary:"Pairwise summation recursively sums halves of the data. It reduces error to O(log n * eps) and is faster than Kahan on modern hardware because it uses the same memory access pattern.",
+ mental:"Add numbers in a balanced tree",
+ mentalText:"Split the array in half, sum each half recursively, then add the two halves. Depth is log n, so error grows logarithmically.",
+ steps:["Split the array into two halves.","Recursively sum each half.","Add the two half-sums.","Base case: small arrays summed directly."],
+ pseudo:"pairwise_sum(a, lo, hi):\n  n = hi - lo\n  if n < threshold: direct sum\n  mid = (lo + hi) / 2\n  return pairwise_sum(a, lo, mid) + pairwise_sum(a, mid, hi)\n\nError bound: O(log n * eps)\nSpeed: often faster than Kahan because of cache-friendly access\n\nNumpy uses pairwise summation by default.\nBlocked variants apply pairwise to blocks for even better cache behavior.",
+ uses:"Numpy, BLAS, high-performance libraries, GPU reductions.",
+ strength:"Logarithmic error growth. Fast. Vectorizable.",
+ limits:"Slightly more code than naive summation.",
+ pitfall:"Using a very small base case eliminates the benefit. Use a base case around 8 to 32 elements.",
+ question:"Why does pairwise summation have O(log n) error?",
+ answer:"The depth of the recursion is log2(n). Errors add along each path, giving logarithmic growth.",
+ demo:"pairwise",sample:"1e16\n1\n1\n1\n1\n1\n1\n1\n1\n1\n1\n-1e16",refs:[
+  ["Higham, Section 4.3 Pairwise summation","https://epubs.siam.org/doi/book/10.1137/1.9780898718027"],
+  ["NumPy documentation, pairwise summation","https://numpy.org/doc/stable/reference/generated/numpy.sum.html"],
+  ["Blumofe and Leiserson, Scheduling multithreaded computations by work stealing, JACM 1999","https://doi.org/10.1145/324133.324234"]]},
+{id:"interval",title:"Interval arithmetic",level:4,kind:"Numerical stability",status:"Runnable teaching lab",
+ summary:"Interval arithmetic represents each quantity as a range [a, b] and propagates that range through computations. For rigorous interval arithmetic, every operation must be rounded outward so the true result is contained in the computed interval.",
+ mental:"Compute with ranges instead of points",
+ mentalText:"Each value is a range. Addition, multiplication, and other operations are defined so the result is a range that contains every possible true result.",
+ steps:["Represent each input as [lo, hi].","Round each operation outward: lower bound rounded down, upper bound rounded up.","Return the resulting interval.","A zero-width or overlapping interval proves correctness."],
+ pseudo:"Interval operations:\n  [a, b] + [c, d] = [a + c (down), b + d (up)]\n  [a, b] - [c, d] = [a - d (down), b - c (up)]\n  [a, b] * [c, d] = [min of products, max of products]\n  [a, b] / [c, d] = only if 0 not in [c, d]\n\nProperties:\n  the true result is always contained in the interval\n  monotonically increasing width under composition\n\nApplications:\n  verified computation\n  proof of bounds\n  robust root finding\n  constraint propagation\n  physics engines",
+ uses:"Verified computing, robotics, control systems, formal verification.",
+ strength:"Gives rigorous bounds. Detects when results are certain or uncertain.",
+ limits:"Intervals can be much wider than the true answer. Dependence between variables causes overestimation.",
+ pitfall:"Ignoring correlation between variables causes very wide intervals. Use Taylor models or affine arithmetic to reduce overestimation.",
+ question:"Why can interval arithmetic be much wider than the true answer?",
+ answer:"The same variable appearing multiple times is treated as independent. This is the dependence problem.",
+ demo:"interval",sample:"0.1\n3.14159",refs:[
+  ["Moore, Interval Analysis, Prentice Hall 1966","https://archive.org/details/intervalanalysis0000moor"],
+  ["Neumaier, Interval Methods for Systems of Equations, Cambridge 1990","https://www.cambridge.org/core/books/interval-methods-for-systems-of-equations/"],
+  ["Wikipedia, Interval arithmetic","https://en.wikipedia.org/wiki/Interval_arithmetic"]]},
+/* Ch 3 */
+{id:"bisection",title:"Bisection and false position",level:2,kind:"Root finding",status:"Runnable teaching lab",
+ summary:"Bisection finds a root of f on [a, b] by repeatedly halving the interval. False position uses linear interpolation instead. Both converge to a bracketed root when f is continuous on the interval and the endpoint values have opposite signs.",
+ mental:"Halve the interval until the root is bracketed",
+ mentalText:"If f(a) and f(b) have opposite signs, there is a root in [a, b]. Evaluate at the midpoint. Keep the half with the sign change.",
+ steps:["Choose a and b with f(a) * f(b) < 0.","Compute c = (a + b) / 2.","If f(c) = 0 or interval is small enough, stop.","Else replace whichever endpoint has the same sign as f(c).","Repeat."],
+ pseudo:"bisection(f, a, b, tol, max_iter):\n  fa = f(a)\n  fb = f(b)\n  if fa * fb >= 0: error\n  for k in 1..max_iter:\n    c = (a + b) / 2\n    fc = f(c)\n    if |fc| < tol or (b - a) / 2 < tol: return c\n    if fa * fc < 0:\n      b, fb = c, fc\n    else:\n      a, fa = c, fc\n  return c\n\nConvergence: linear, one bit per iteration\nIterations for tol: log2((b - a) / tol)\nGuaranteed to converge for any continuous f with a sign change.\n\nFalse position uses the secant line instead of the midpoint.\nFaster but can get stuck at one endpoint.",
+ uses:"Any bracketed root finding. Bisection is the fallback when other methods fail.",
+ strength:"Guaranteed convergence. Simple. Robust.",
+ limits:"Linear convergence. Slow for high accuracy.",
+ pitfall:"Bisection requires a sign change. If the function is tangent to zero, the method fails.",
+ question:"How many iterations for tol = 1e-10 with initial interval length 1?",
+ answer:"About 34. log2(1e10) is about 33.2.",
+ demo:"bisection",sample:"1\n2\n1e-10",refs:[
+  ["Burden and Faires, Numerical Analysis, 10th ed., Cengage 2015","https://www.cengage.com/c/numerical-analysis-10e-burden/9781305253667/"],
+  ["Wikipedia, Bisection method","https://en.wikipedia.org/wiki/Bisection_method"],
+  ["Brent, Algorithms for Minimization Without Derivatives, Prentice Hall 1973","https://www.sciencedirect.com/book/9780130223351/algorithms-for-minimization-without-derivatives"]]},
+{id:"newton",title:"Newton-Raphson method",level:3,kind:"Root finding",status:"Runnable teaching lab",
+ summary:"Newton's method uses the tangent line to the function at the current point to find the next estimate. It converges quadratically near a simple root but requires the derivative.",
+ mental:"Follow the tangent line down to zero",
+ mentalText:"The tangent line at x_n hits zero at x_n minus f(x_n) / f'(x_n). That is the next estimate.",
+ steps:["Choose an initial x_0.","Compute f(x_n) and f'(x_n).","Update x_{n+1} = x_n - f(x_n) / f'(x_n).","Stop when |f| or |dx| is small."],
+ pseudo:"newton(f, f_prime, x0, tol, max_iter):\n  x = x0\n  for k in 1..max_iter:\n    fx = f(x)\n    fpx = f_prime(x)\n    if |fpx| < eps: break  # derivative too small\n    dx = fx / fpx\n    x = x - dx\n    if |dx| < tol or |fx| < tol: return x\n  return x\n\nConvergence: quadratic near simple roots\nIterations: ~log2(log2(1/tol)) once close\n\nRequires the derivative.\nCan diverge or cycle on difficult functions.",
+ uses:"Root finding, optimization (Newton for minimization), implicit methods, ML (Newton updates).",
+ strength:"Very fast convergence near the root.",
+ limits:"Needs the derivative. Can diverge if started far from the root.",
+ pitfall:"Newton can jump far away and diverge. Use a safeguard: clamp the step or combine with bisection (as in Brent).",
+ question:"What does Newton's method do near a multiple root?",
+ answer:"Convergence drops from quadratic to linear. Use a modified Newton with multiplicity or a different method.",
+ demo:"newton",sample:"1\n1e-10\n20",refs:[
+  ["Burden and Faires, Numerical Analysis, 10th ed.","https://www.cengage.com/c/numerical-analysis-10e-burden/9781305253667/"],
+  ["Nocedal and Wright, Numerical Optimization, 2nd ed., Springer 2006","https://link.springer.com/book/10.1007/978-0-387-40065-5"],
+  ["Wikipedia, Newton's method","https://en.wikipedia.org/wiki/Newton%27s_method"]]},
+{id:"secant",title:"Secant method",level:3,kind:"Root finding",status:"Runnable teaching lab",
+ summary:"The secant method approximates the derivative using the previous two iterates. Superlinear convergence without derivative evaluation.",
+ mental:"Draw a secant through the last two points",
+ mentalText:"Replace f' with the finite difference (f(x_n) - f(x_{n-1})) / (x_n - x_{n-1}).",
+ steps:["Start with two points x_0, x_1.","Compute the secant slope.","Update x_{n+1} = x_n - f(x_n) / slope.","Repeat."],
+ pseudo:"secant(f, x0, x1, tol, max_iter):\n  f0 = f(x0); f1 = f(x1)\n  for k in 1..max_iter:\n    if |f1 - f0| < eps: break\n    x2 = x1 - f1 * (x1 - x0) / (f1 - f0)\n    x0, f0 = x1, f1\n    x1, f1 = x2, f(x2)\n    if |x1 - x0| < tol or |f1| < tol: return x1\n  return x1\n\nConvergence: superlinear, order ~1.618\n(like the golden ratio)\n\nFaster than bisection, slower than Newton.\nNo derivative needed.",
+ uses:"Root finding when the derivative is expensive or unavailable.",
+ strength:"No derivative. Superlinear convergence.",
+ limits:"Can fail if f(x_n) and f(x_{n-1}) are nearly equal.",
+ pitfall:"If f values at the two iterates are very close, the slope is nearly zero and the step explodes.",
+ question:"What is the order of convergence of the secant method?",
+ answer:"About 1.618, the golden ratio. Superlinear but not quadratic.",
+ demo:"secant",sample:"1\n2\n1e-10\n20",refs:[
+  ["Burden and Faires, Numerical Analysis, 10th ed.","https://www.cengage.com/c/numerical-analysis-10e-burden/9781305253667/"],
+  ["Wikipedia, Secant method","https://en.wikipedia.org/wiki/Secant_method"],
+  ["Traub, Iterative Methods for the Solution of Equations, Prentice Hall 1964","https://archive.org/details/iterativemethods0000trau"]]},
+{id:"brent",title:"Brent's method",level:4,kind:"Root finding",status:"Runnable teaching lab",
+ summary:"Brent's method combines bisection, secant and inverse quadratic interpolation. It converges superlinearly and has the guaranteed convergence of bisection.",
+ mental:"Try the fast method; fall back to bisection when unsafe",
+ mentalText:"At each step, try the best interpolation. If it is unsafe or too slow, take a bisection step. Keep the best of both.",
+ steps:["Maintain a bracketing interval [a, b].","Try inverse quadratic interpolation or secant.","Check if the proposal is safe and inside the bracket.","Otherwise fall back to bisection.","Tighten the bracket each iteration."],
+ pseudo:"brent(f, a, b, tol):\n  fa = f(a); fb = f(b)\n  if fa * fb >= 0: error\n  c, fc = a, fa\n  d = e = b - a\n  for k in 1..max_iter:\n    if fb * fc > 0:\n      c, fc = a, fa\n      d = e = b - a\n    if |fc| < |fb|:\n      a, b, c = b, c, b\n      fa, fb, fc = fb, fc, fb\n    # try inverse quadratic interpolation or secant\n    tol_step = 2 * eps * |b| + 0.5 * tol\n    xm = 0.5 * (c - b)\n    if |xm| <= tol_step or |fb| < tol: return b\n    if |e| >= tol_step and |fa| > |fb|:\n      # interpolation step\n      s = fb / fa\n      if a == c:  # secant\n        p = 2 * xm * s\n        q = 1 - s\n      else:      # inverse quadratic\n        q = fa / fc\n        r = fb / fc\n        p = s * (2 * xm * q * (q - r) - (b - a) * (r - 1))\n        q = (q - 1) * (r - 1) * (s - 1)\n      if p > 0: q = -q\n      else: p = -p\n      if 2*p < min(3*xm*q - |tol_step*q|, |e*q|):\n        e = d; d = p / q\n      else:\n        d = xm; e = d\n    else:\n      d = xm; e = d\n    a, fa = b, fb\n    if |d| > tol_step: b += d\n    else: b += sign(xm) * tol_step\n    fb = f(b)\n  return b\n\nConvergence:\n  superlinear in typical cases\n  guaranteed linear (bisection) fallback\n\nUsed in MATLAB fzero, scipy.optimize.brentq.",
+ uses:"Standard root finding. Robust and fast. Combines the strengths of bisection, secant and inverse quadratic interpolation.",
+ strength:"Guaranteed convergence with superlinear speed.",
+ limits:"More code than bisection or Newton. Requires a bracket.",
+ pitfall:"Implementation bugs in the fallback logic break the guarantee. Test on a variety of functions.",
+ question:"What does Brent's method combine?",
+ answer:"Bisection, secant and inverse quadratic interpolation. It uses the fast method when safe and bisection as a fallback.",
+ demo:"brent",sample:"1\n2\n1e-10",refs:[
+  ["Brent, Algorithms for Minimization Without Derivatives, Prentice Hall 1973","https://www.sciencedirect.com/book/9780130223351/algorithms-for-minimization-without-derivatives"],
+  ["Forsythe, Malcolm, Moler, Computer Methods for Mathematical Computations, Prentice Hall 1977","https://archive.org/details/computermethodsfo0000fors"],
+  ["scipy.optimize.brentq documentation","https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.brentq.html"]]},
+/* Ch 4 */
+{id:"fixed-point",title:"Fixed-point iteration",level:2,kind:"Nonlinear systems",status:"Runnable teaching lab",
+ summary:"Fixed-point iteration finds x such that x = g(x). Convergence depends on |g'(x)| < 1 near the fixed point.",
+ mental:"Feed the output back in until it stops changing",
+ mentalText:"Start with x_0. Compute x_{n+1} = g(x_n). If g is a contraction near the solution, the sequence converges.",
+ steps:["Rewrite the problem as x = g(x).","Choose an initial x_0.","Iterate x_{n+1} = g(x_n).","Stop when |x_{n+1} - x_n| is small."],
+ pseudo:"fixed_point(g, x0, tol, max_iter):\n  x = x0\n  for k in 1..max_iter:\n    x_new = g(x)\n    if |x_new - x| < tol: return x_new\n    x = x_new\n  return x\n\nConvergence condition:\n  |g'(x*)| < 1 near the fixed point\n  rate: linear with constant |g'(x*)|\n\nContraction mapping theorem:\n  if |g'(x)| <= L < 1 on an interval containing x*,\n  then iteration from any starting point in the interval\n  converges to the unique fixed point.\n\nExample: sqrt(2) via x_{n+1} = (x_n + 2/x_n) / 2\n(Newton's method for x^2 - 2 = 0)",
+ uses:"Iterative methods, dynamical systems, contraction mappings.",
+ strength:"Simple. Convergence guaranteed for contractions.",
+ limits:"Only converges when |g'| < 1. Slow when |g'| is close to 1.",
+ pitfall:"Using an iteration function with |g'| > 1 near the solution. Then the iteration diverges.",
+ question:"Why does the iteration x = (x + 2/x) / 2 converge to sqrt(2)?",
+ answer:"This is Newton's method for f(x) = x^2 - 2. It converges quadratically near sqrt(2) because f'(sqrt(2)) is not zero.",
+ demo:"fixed-point",sample:"1\n1e-10\n50",refs:[
+  ["Burden and Faires, Numerical Analysis, 10th ed.","https://www.cengage.com/c/numerical-analysis-10e-burden/9781305253667/"],
+  ["Wikipedia, Fixed-point iteration","https://en.wikipedia.org/wiki/Fixed-point_iteration"],
+  ["Zeidler, Nonlinear Functional Analysis and its Applications, Springer 1986","https://link.springer.com/book/10.1007/978-1-4612-0985-0"]]},
+{id:"broyden",title:"Broyden's method",level:4,kind:"Nonlinear systems",status:"Concept lesson",
+ summary:"Broyden's method is a quasi-Newton method for nonlinear systems. It approximates the Jacobian and updates it with a rank-one correction, avoiding full recomputation.",
+ mental:"Newton's method without recomputing the Jacobian",
+ mentalText:"Start with an approximate Jacobian. Update it with a rank-one correction after each step. Solve the linearized system for the next step.",
+ steps:["Choose an initial x_0 and Jacobian approximation B_0.","Solve B_n s_n = -F(x_n).","Update x_{n+1} = x_n + s_n.","Update B_{n+1} with the Broyden formula.","Repeat."],
+ pseudo:"Broyden's good formula:\n  s_n = -B_n^-1 F(x_n)\n  y_n = F(x_{n+1}) - F(x_n)\n  B_{n+1} = B_n + (y_n - B_n s_n) s_n^T / (s_n^T s_n)\n\nBroyden's bad formula (inverse):\n  H_{n+1} = H_n + (s_n - H_n y_n) s_n^T H_n / (s_n^T H_n y_n)\n\nConvergence: superlinear near the solution\n\nAdvantages:\n  no Jacobian evaluation after the first step\n  cheaper per iteration than Newton\n\nDisadvantages:\n  convergence is superlinear but not quadratic\n  less robust than Newton",
+ uses:"Solving systems of nonlinear equations, ML (some quasi-Newton variants), engineering simulation.",
+ strength:"No Jacobian evaluation. Superlinear convergence.",
+ limits:"Less robust than Newton. Memory grows with dimension.",
+ pitfall:"Starting with a poor Jacobian approximation hurts convergence. Use a finite-difference Jacobian initially.",
+ question:"How does Broyden differ from Newton?",
+ answer:"Newton recomputes the full Jacobian at every step. Broyden updates an approximation with a rank-one correction.",
+ demo:"none",sample:"",refs:[
+  ["Broyden, A class of methods for solving nonlinear simultaneous equations, Math. Comp. 1965","https://doi.org/10.1090/S0025-5718-1965-0198670-6"],
+  ["Dennis and Schnabel, Numerical Methods for Unconstrained Optimization and Nonlinear Equations, SIAM 1996","https://epubs.siam.org/doi/book/10.1137/1.9781611971200"],
+  ["Wikipedia, Broyden's method","https://en.wikipedia.org/wiki/Broyden%27s_method"]]},
+{id:"gauss-newton",title:"Gauss-Newton and Levenberg-Marquardt",level:4,kind:"Nonlinear systems",status:"Runnable teaching lab",
+ summary:"Gauss-Newton solves nonlinear least squares by linearizing the residual at each step. Levenberg-Marquardt adds a damping term that interpolates between Gauss-Newton and gradient descent.",
+ mental:"Solve the linearized least squares problem iteratively",
+ mentalText:"At each step, linearize r(x). Solve the linear least squares problem for the update. LM adds a damping term to control the step size.",
+ steps:["Compute the residual r(x_n) and its Jacobian J.","Gauss-Newton: solve J^T J dx = -J^T r.","LM: solve (J^T J + lambda I) dx = -J^T r.","Update x_{n+1} = x_n + dx.","Adjust lambda based on progress."],
+ pseudo:"Residual: r(x) = [r_1(x), ..., r_m(x)]\nObjective: min 0.5 ||r(x)||^2\n\nGauss-Newton:\n  J = dr/dx\n  solve (J^T J) dx = -J^T r\n\nLevenberg-Marquardt:\n  solve (J^T J + lambda diag(J^T J)) dx = -J^T r\n\n  large lambda -> small step, gradient descent-like\n  small lambda -> Gauss-Newton\n\nAdaptive lambda:\n  if the step reduces the cost, decrease lambda\n  otherwise increase lambda\n\nConvergence:\n  Gauss-Newton: quadratic near solution if residual is small\n  LM: robust, superlinear\n\nUsed in curve fitting, bundle adjustment, SLAM.",
+ uses:"Curve fitting, nonlinear regression, computer vision, robotics.",
+ strength:"LM is robust and effective for many least squares problems.",
+ limits:"Requires the Jacobian. Cost per step is O(n^3) for the linear solve.",
+ pitfall:"Without a good initial guess, LM can converge to a local minimum.",
+ question:"When does Levenberg-Marquardt behave like gradient descent?",
+ answer:"When lambda is very large. The damping term dominates and the step is small and aligned with the negative gradient.",
+ demo:"levenberg",sample:"1.0 0.4 1.0\n\n2.0 2.7 3.7 5.0 6.8",refs:[
+  ["Levenberg, A method for the solution of certain nonlinear problems in least squares, QAM 1944","https://doi.org/10.1090/qam/10666"],
+  ["Marquardt, An algorithm for least-squares estimation of nonlinear parameters, J. SIAM 1963","https://doi.org/10.1137/0111030"],
+  ["Nocedal and Wright, Numerical Optimization, Chapter 10","https://link.springer.com/book/10.1007/978-0-387-40065-5"]]},
+/* Ch 5 */
+{id:"linear-spline",title:"Linear and spline interpolation",level:2,kind:"Interpolation",status:"Runnable teaching lab",
+ summary:"Linear interpolation draws a straight line between adjacent points. Cubic splines fit a smooth curve through all points with continuous first and second derivatives.",
+ mental:"Connect the dots, or fit a smooth curve",
+ mentalText:"Linear interpolation is fast but not smooth. Cubic splines are smooth and are the standard for graphics and engineering.",
+ steps:["Sort the data by x.","Linear: y = y_i + (x - x_i) * (y_{i+1} - y_i) / (x_{i+1} - x_i).","Spline: solve a tridiagonal system for the second derivatives.","Evaluate the spline piecewise."],
+ pseudo:"Linear:\n  find i such that x_i <= x < x_{i+1}\n  return y_i + (x - x_i) (y_{i+1} - y_i) / (x_{i+1} - x_i)\n\nCubic spline (natural):\n  S_i(x) = a_i + b_i (x - x_i) + c_i (x - x_i)^2 + d_i (x - x_i)^3\n  continuity of S, S', S''\n  natural boundary: S''(x_0) = S''(x_n) = 0\n\nSolve the tridiagonal system:\n  O(n) time with Thomas algorithm\n\nProperties:\n  linear: C^0 continuous\n  cubic spline: C^2 continuous",
+ uses:"Graphics, animation, digital elevation models, curve fitting, CAD.",
+ strength:"Splines are smooth. Linear is simple and monotone-preserving.",
+ limits:"Natural splines overshoot near the boundaries.",
+ pitfall:"Sorting is required. If x values are not sorted, the interpolation is wrong.",
+ question:"Why use a cubic spline instead of a high-degree polynomial?",
+ answer:"High-degree polynomials oscillate wildly (Runge's phenomenon). Splines are locally controlled and stable.",
+ demo:"linear-spline",sample:"0 0\n1 1\n2 4\n3 9\n4 16\n\n1.5\n2.7",refs:[
+  ["de Boor, A Practical Guide to Splines, Springer 2001","https://link.springer.com/book/10.1007/978-1-4612-6333-3"],
+  ["Burden and Faires, Numerical Analysis, Chapter 3","https://www.cengage.com/c/numerical-analysis-10e-burden/9781305253667/"],
+  ["Wikipedia, Spline interpolation","https://en.wikipedia.org/wiki/Spline_interpolation"]]},
+{id:"chebyshev",title:"Chebyshev approximation",level:4,kind:"Approximation",status:"Runnable teaching lab",
+ summary:"Chebyshev polynomials are orthogonal on [-1, 1] and have the minimax property. Chebyshev nodes interpolate a function without Runge's phenomenon.",
+ mental:"The best polynomial approximation of a function",
+ mentalText:"Chebyshev polynomials give a near-minimax approximation. Chebyshev nodes cluster near the endpoints and avoid the wild oscillations of equally spaced nodes.",
+ steps:["Map [a, b] to [-1, 1].","Choose Chebyshev nodes x_k = cos((2k+1) pi / (2n)).","Interpolate or fit the function.","Evaluate using a stable recurrence or barycentric formula."],
+ pseudo:"Chebyshev nodes on [-1, 1]:\n  x_k = cos(pi (k + 0.5) / n), k = 0..n-1\n\nChebyshev polynomials:\n  T_0(x) = 1\n  T_1(x) = x\n  T_{n+1}(x) = 2 x T_n(x) - T_{n-1}(x)\n\nChebyshev series of f:\n  f(x) ~ sum_k c_k T_k(x)\n  c_0 = (1 / n) sum_j f(x_j); for k > 0, c_k = (2 / n) sum_j f(x_j) T_k(x_j)\n\nMinimax property:\n  among all monic degree-n polynomials, 2^(1-n) T_n has the\n  smallest maximum absolute value on [-1, 1].\n\nRunge's phenomenon:\n  equal spacing gives Gibbs oscillations near endpoints\n  Chebyshev spacing avoids this",
+ uses:"Function approximation, spectral methods, numerical integration, Chebfun.",
+ strength:"Near-minimax approximation. Fast convergence for smooth functions.",
+ limits:"Convergence depends on the smoothness of the function.",
+ pitfall:"Using too few nodes for a rapidly oscillating function. Choose n based on the function's smoothness.",
+ question:"Why do Chebyshev nodes cluster near the endpoints?",
+ answer:"The cosine mapping is denser near +1 and -1. This counteracts the larger error near the endpoints of the interval.",
+ demo:"chebyshev",sample:"4",refs:[
+  ["Trefethen, Approximation Theory and Approximation Practice, SIAM 2013","https://people.maths.ox.ac.uk/trefethen/ATAP/"],
+  ["Boyd, Chebyshev and Fourier Spectral Methods, Dover 2001","https://depts.washington.edu/ph506/Boyd.pdf"],
+  ["Wikipedia, Chebyshev polynomials","https://en.wikipedia.org/wiki/Chebyshev_polynomials"]]},
+{id:"barycentric-remez",title:"Barycentric interpolation and Remez",level:5,kind:"Approximation",status:"Concept lesson",
+ summary:"Barycentric interpolation is a numerically stable way to evaluate a polynomial interpolant. The Remez algorithm finds the minimax polynomial approximation of a function on an interval.",
+ mental:"Stable evaluation and the best possible polynomial",
+ mentalText:"Barycentric form avoids explicit polynomial coefficients. Remez iteratively finds the polynomial whose maximum error is as small as possible.",
+ steps:["Barycentric: precompute weights w_k = 1 / prod_{j != k} (x_k - x_j).","Evaluate p(x) = sum w_k f(x_k) / (x - x_k) divided by sum w_k / (x - x_k).","Remez: choose n+2 reference points.","Solve for the polynomial and error E.","Move the references to the extrema of the error."],
+ pseudo:"Barycentric formula (n+1 nodes):\n  w_k = 1 / prod_{j != k} (x_k - x_j)\n\n  p(x) = ( sum_k w_k / (x - x_k) f(x_k) )\n       / ( sum_k w_k / (x - x_k) )\n\n  O(n) per evaluation, numerically stable.\n\nRemez algorithm:\n  1. choose n+2 Chebyshev-like reference points x_0 < ... < x_{n+1}\n  2. solve the linear system:\n       p(x_k) + (-1)^k E = f(x_k)\n     for the n+1 coefficients of p and the error E\n  3. find the local extrema of f(x) - p(x)\n  4. if |E| is not yet optimal, replace references with extrema\n  5. repeat until convergence\n\nConvergence: quadratic near the optimum",
+ uses:"Numerical libraries, minimax approximations of special functions, graphics, DSP.",
+ strength:"Barycentric is stable and efficient. Remez gives the minimax best approximation.",
+ limits:"Remez is complex to implement. Fails if the function is not smooth.",
+ pitfall:"Barycentric weights for equally spaced nodes are ill-conditioned. Use Chebyshev nodes.",
+ question:"Why is barycentric interpolation stable?",
+ answer:"It avoids explicit polynomial coefficients, which are sensitive to perturbations. The weights and evaluation are both stable.",
+ demo:"none",sample:"",refs:[
+  ["Berrut and Trefethen, Barycentric Lagrange interpolation, SIAM Review 2004","https://doi.org/10.1137/S0036144502417715"],
+  ["Remez, Sur la détermination des polynômes d'approximation de degré donnée, Comm. Soc. Math. Kharkov 1934","https://en.wikipedia.org/wiki/Remez_algorithm"],
+  ["Pachón and Trefethen, Barycentric-Remez algorithms for best polynomial approximation in the chebfun system, BIT 2009","https://doi.org/10.1007/s10543-009-0240-1"]]},
+/* Ch 6 */
+{id:"finite-differences",title:"Finite differences and complex-step",level:3,kind:"Numerical differentiation",status:"Runnable teaching lab",
+ summary:"Finite differences approximate derivatives using function values at nearby points. The complex-step method achieves machine precision by taking a purely imaginary perturbation.",
+ mental:"Approximate the slope with nearby points",
+ mentalText:"Forward difference uses f(x + h). Central difference uses both sides. Complex step uses f(x + i h) and takes the imaginary part.",
+ steps:["Choose h.","Forward: f'(x) ~ (f(x+h) - f(x)) / h.","Central: f'(x) ~ (f(x+h) - f(x-h)) / (2h).","Complex: f'(x) ~ Im(f(x + i h)) / h."],
+ pseudo:"Forward difference: error O(h)\nCentral difference: error O(h^2)\nComplex-step:   error O(h^2), but no subtraction, so no cancellation\n\nComplex-step formula:\n  f'(x) = Im(f(x + i h)) / h + O(h^2)\n\nh can be as small as 1e-20.\n\nRichardson extrapolation:\n  combine different h to cancel low-order error terms\n\nOptimal h for central difference:\n  h ~ eps^(1/3) ~ 6e-6 for float64",
+ uses:"Verifying gradients, computing derivatives of black-box functions, sensitivity analysis.",
+ strength:"Simple. Complex-step gives machine precision.",
+ limits:"Finite differences are sensitive to h. Complex step requires complex arithmetic.",
+ pitfall:"Choosing h too small causes catastrophic cancellation. Choose h to balance truncation and rounding.",
+ question:"Why is the complex-step method so accurate?",
+ answer:"The real part of f(x + i h) is f(x) - f''(x) h^2 / 2. The imaginary part is f'(x) h + O(h^3). Dividing by h gives f'(x) without subtracting two close real numbers.",
+ demo:"finite-differences",sample:"1\n1e-5",refs:[
+  ["Squire and Trapp, Using complex variables to estimate derivatives of real functions, SIAM Review 1998","https://doi.org/10.1137/S003614459631241X"],
+  ["Fornberg, Numerical Differentiation of Analytic Functions, 1981","https://doi.org/10.1145/355934.355941"],
+  ["Wikipedia, Numerical differentiation","https://en.wikipedia.org/wiki/Numerical_differentiation"]]},
+{id:"richardson",title:"Richardson extrapolation",level:4,kind:"Numerical differentiation",status:"Runnable teaching lab",
+ summary:"Richardson extrapolation combines approximations at different step sizes to cancel leading error terms. It accelerates convergence without requiring more evaluations.",
+ mental:"Cancel the error terms by combining two estimates",
+ mentalText:"If the error has a known form C h^p + ..., combining approximations at h and h/2 cancels the leading term.",
+ steps:["Compute the approximation at step size h.","Compute it again at h/2.","Combine: R = (2^p A(h/2) - A(h)) / (2^p - 1).","Repeat for higher-order cancellation."],
+ pseudo:"Richardson extrapolation:\n  Given A(h) with expansion A(h) = L + C h^p + O(h^{p+q})\n\n  Define:\n    R(h) = (2^p A(h/2) - A(h)) / (2^p - 1)\n\n  Then R(h) = L + O(h^{p+q})\n\nExample (central difference, p = 2, q = 2):\n  D(h) = (f(x+h) - f(x-h)) / (2h)\n  D(h) = f'(x) + c h^2 + O(h^4)\n  Extrapolated: (4 D(h/2) - D(h)) / 3\n\nRecursion:\n  R_{j,k} = R_{j,k-1} + (R_{j,k-1} - R_{j-1,k-1}) / (2^k - 1)\n\nTrapezoid + Richardson = Romberg integration.",
+ uses:"Numerical differentiation, numerical integration (Romberg), ODE solvers (extrapolation methods), PDE solvers.",
+ strength:"Much higher accuracy for the same step size.",
+ limits:"Requires a smooth error expansion. Breaks down if the function has singularities or noise.",
+ pitfall:"Applying Richardson extrapolation when the error expansion has different terms. Check the order of the method first.",
+ question:"What is Romberg integration?",
+ answer:"It is Richardson extrapolation applied to the trapezoid rule. It cancels successively higher-order error terms.",
+ demo:"richardson",sample:"1\n0.5\n0.25\n0.125",refs:[
+  ["Richardson, The deferred approach to the limit, Phil. Trans. Royal Soc. A 1927","https://doi.org/10.1098/rsta.1927.0008"],
+  ["Burden and Faires, Numerical Analysis, Section 4.5","https://www.cengage.com/c/numerical-analysis-10e-burden/9781305253667/"],
+  ["Wikipedia, Richardson extrapolation","https://en.wikipedia.org/wiki/Richardson_extrapolation"]]},
+{id:"trapezoid-simpson",title:"Trapezoid and Simpson rules",level:3,kind:"Numerical integration",status:"Runnable teaching lab",
+ summary:"The trapezoid rule approximates the integral by summing trapezoid areas. Simpson's rule uses quadratic interpolation over pairs of intervals for higher accuracy.",
+ mental:"Cover the area with shapes you can compute",
+ mentalText:"Trapezoid uses straight segments. Simpson uses parabolas through every two intervals.",
+ steps:["Choose n intervals of width h = (b-a)/n.","Trapezoid: sum h * (f(x_0)/2 + f(x_1) + ... + f(x_n)/2).","Simpson: sum h/3 * (f_0 + 4 f_1 + 2 f_2 + 4 f_3 + ... + f_n).","Compare with the true value."],
+ pseudo:"Trapezoid rule:\n  T_n = h (f_0/2 + f_1 + f_2 + ... + f_{n-1} + f_n/2)\n  error: O(h^2)\n\nSimpson's rule (n even):\n  S_n = h/3 (f_0 + 4 sum_odd + 2 sum_even + f_n)\n  error: O(h^4)\n\nRomberg integration:\n  R_{j,k} extrapolates from trapezoid results\n  converges faster than either rule\n\nAdaptive quadrature:\n  split intervals where error is large",
+ uses:"Integrating functions numerically, physics, engineering, statistics.",
+ strength:"Simple and effective for smooth functions.",
+ limits:"Convergence depends on smoothness. Singularities slow convergence.",
+ pitfall:"Using Simpson with odd n. It requires an even number of intervals.",
+ question:"Which converges faster, trapezoid or Simpson?",
+ answer:"Simpson. Its error is O(h^4) versus O(h^2) for trapezoid.",
+ demo:"quadrature",sample:"0 1 10",refs:[
+  ["Burden and Faires, Numerical Analysis, Section 4.3 and 4.4","https://www.cengage.com/c/numerical-analysis-10e-burden/9781305253667/"],
+  ["Davis and Rabinowitz, Methods of Numerical Integration, Dover 2007","https://store.doverpublications.com/0486453391.html"],
+  ["Wikipedia, Trapezoidal rule","https://en.wikipedia.org/wiki/Trapezoidal_rule"]]},
+{id:"gaussian-quad",title:"Gaussian quadrature",level:4,kind:"Numerical integration",status:"Runnable teaching lab",
+ summary:"Gaussian quadrature places evaluation points optimally (Gauss-Legendre nodes) to maximize accuracy. An n-point rule exactly integrates polynomials of degree 2n-1.",
+ mental:"Choose the best points, not equally spaced ones",
+ mentalText:"Gauss-Legendre nodes are the roots of Legendre polynomials. They cluster near the endpoints. The weights are chosen to maximize accuracy.",
+ steps:["Choose the number of points n.","Look up the Gauss-Legendre nodes and weights.","Map from [-1, 1] to [a, b].","Sum w_i f(x_i)."],
+ pseudo:"Gauss-Legendre quadrature on [-1, 1]:\n  integral f(x) dx ~ sum_i w_i f(x_i)\n\n  x_i = roots of Legendre polynomial P_n\n  w_i = 2 / ((1 - x_i^2) (P_n'(x_i))^2)\n\nExactness:\n  n-point rule integrates degree 2n-1 polynomials exactly\n\nMapping to [a, b]:\n  x_i' = (a + b)/2 + (b - a)/2 x_i\n  w_i' = (b - a)/2 w_i\n\nCommon rules:\n  2-point: x = +/- 1/sqrt(3), w = 1\n  3-point: x = 0, +/- sqrt(3/5), w = 8/9, 5/9\n\nVariants:\n  Gauss-Hermite for e^(-x^2) on R\n  Gauss-Laguerre for e^(-x) on [0, inf)\n  Gauss-Chebyshev for 1/sqrt(1-x^2) on [-1, 1]",
+ uses:"Numerical integration where high accuracy is needed for smooth functions.",
+ strength:"Optimal polynomial exactness for the number of nodes.",
+ limits:"Not well suited to non-smooth functions or functions with singularities.",
+ pitfall:"Using Gaussian quadrature on a function with a kink inside the interval. Accuracy drops dramatically.",
+ question:"How many points does an n-point Gauss-Legendre rule integrate exactly?",
+ answer:"Degree 2n-1 polynomials. The 2-point rule integrates cubics exactly.",
+ demo:"gauss-quad",sample:"5",refs:[
+  ["Golub and Welsch, Calculation of Gauss quadrature rules, Math. Comp. 1969","https://doi.org/10.1090/S0025-5718-69-99647-1"],
+  ["Trefethen, Is Gauss quadrature better than Clenshaw-Curtis?, SIAM Review 2008","https://doi.org/10.1137/060659831"],
+  ["Wikipedia, Gaussian quadrature","https://en.wikipedia.org/wiki/Gaussian_quadrature"]]},
+/* Ch 7 */
+{id:"horner",title:"Horner's method",level:2,kind:"Polynomial",status:"Runnable teaching lab",
+ summary:"Horner's method evaluates a polynomial with n multiplications and n additions, using a nested form. It is both fast and numerically stable.",
+ mental:"Factor out x repeatedly",
+ mentalText:"Rewrite a_n x^n + ... + a_0 as ((a_n x + a_{n-1}) x + a_{n-2}) ... x + a_0.",
+ steps:["Start with the leading coefficient.","Multiply by x, add the next coefficient.","Repeat until the constant term.","The result is p(x)."],
+ pseudo:"Horner's method:\n  p = a_n\n  for i in n-1 down to 0:\n    p = p * x + a_i\n  return p\n\nWork: n multiplications and n additions (vs O(n^2) naive)\n\nDerivative (synthetic division):\n  q = 0\n  for i in n down to 1:\n    q = q * x + p\n    p = p * x + a_i\n\nStability:\n  Horner is generally backward stable for polynomial evaluation.\n\nMultipoint evaluation:\n  use divide and conquer for O(n log^2 n) evaluation of a polynomial\n  at n points",
+ uses:"Polynomial evaluation, curve fitting, graphics, control theory, root finding.",
+ strength:"Fast. Stable. Simple.",
+ limits:"Only for single-point evaluation. Multipoint needs a different algorithm.",
+ pitfall:"Evaluating large polynomials with Horner at high-degree points can overflow. Scale or use arbitrary precision.",
+ question:"How many multiplications does Horner's method use for a degree-n polynomial?",
+ answer:"n multiplications and n additions. Naive evaluation uses O(n^2).",
+ demo:"horner",sample:"1 -3 2\n2",refs:[
+  ["Knuth, TAOCP Vol. 2, Section 4.6.4","https://www-cs-faculty.stanford.edu/~knuth/taocp.html"],
+  ["Higham, Section 5.1 Horner's method","https://epubs.siam.org/doi/book/10.1137/1.9780898718027"],
+  ["Wikipedia, Horner's method","https://en.wikipedia.org/wiki/Horner%27s_method"]]},
+{id:"sturm",title:"Sturm sequences and root isolation",level:5,kind:"Polynomial roots",status:"Concept lesson",
+ summary:"A Sturm sequence counts the number of real roots of a polynomial in any interval. Combined with bisection, it isolates each root.",
+ mental:"Count sign changes to count roots",
+ mentalText:"Build a sequence of polynomials starting from p and p'. The number of sign changes at a point minus at another gives the number of roots in between.",
+ steps:["Compute the Sturm sequence: p_0 = p, p_1 = p', p_{k+1} = -rem(p_{k-1}, p_k).","Count sign changes at a and b.","The difference is the number of roots in (a, b).","Bisect recursively to isolate each root."],
+ pseudo:"Sturm sequence:\n  p_0 = p\n  p_1 = p'\n  p_{k+1} = -rem(p_{k-1}, p_k)\n  stop when p_k = 0\n\nSign changes V(x):\n  count how often the sequence changes sign at x\n\nNumber of real roots in (a, b]:\n  V(a) - V(b)\n\nRoot isolation:\n  recursively subdivide [a, b]\n  until each subinterval contains exactly one root\n  then use bisection or Newton to refine",
+ uses:"Symbolic computation, polynomial root finding, algebraic geometry, control theory.",
+ strength:"Exact count of real roots. No numerical iteration required for isolation.",
+ limits:"Coefficients can grow rapidly. Slow for high-degree polynomials.",
+ pitfall:"Numerical errors in the sequence construction. Use exact rational or high-precision arithmetic.",
+ question:"How does a Sturm sequence count real roots?",
+ answer:"The number of real roots in (a, b] equals V(a) - V(b), where V is the number of sign changes in the Sturm sequence.",
+ demo:"none",sample:"",refs:[
+  ["Sturm, Mémoire sur la résolution des équations numériques, 1829","https://en.wikipedia.org/wiki/Sturm%27s_theorem"],
+  ["Basu, Pollack, Roy, Algorithms in Real Algebraic Geometry, Springer 2006","https://link.springer.com/book/10.1007/3-540-33099-2"],
+  ["Wikipedia, Sturm's theorem","https://en.wikipedia.org/wiki/Sturm%27s_theorem"]]},
+{id:"jenkins-traub",title:"Jenkins-Traub and companion matrix",level:5,kind:"Polynomial roots",status:"Concept lesson",
+ summary:"Jenkins-Traub is a three-stage algorithm for finding all roots of a polynomial. The companion matrix eigenvalue method is a numerical alternative.",
+ mental:"Two algorithms for all polynomial roots at once",
+ mentalText:"Jenkins-Traub uses shifted Hessenberg elimination. The companion matrix method reduces polynomial roots to an eigenvalue problem.",
+ steps:["Jenkins-Traub: normalize, apply no-shift stage, then fixed-shift stage, then variable-shift stage.","Companion matrix: build a matrix whose eigenvalues are the roots.","Use a standard eigenvalue algorithm (QR, Francis).","Deflate the polynomial after finding each root."],
+ pseudo:"Jenkins-Traub stages:\n  1. No-shift: for zeros and for building the Hessenberg form\n  2. Fixed-shift: quadratic convergence in the initial iterations\n  3. Variable-shift: refine the roots\n\nComplexity: O(n^2) per root, O(n^3) total\nUsed in R polyroot, MATLAB roots, Numerical Recipes rtsafe.\n\nCompanion matrix:\n  A = [[-a_{n-1}/a_n, -a_{n-2}/a_n, ..., -a_0/a_n],\n       [1, 0, ..., 0],\n       [0, 1, ..., 0],\n       ...]\n  roots of p = eigenvalues of A\n\nEigenvalue algorithms:\n  QR iteration, divide and conquer, Jacobi for symmetric\n\nComplexity: O(n^3)",
+ uses:"Finding all polynomial roots in one call, symbolic algebra, filter design, control theory.",
+ strength:"Jenkins-Traub is robust and fast. Companion matrix is simple to implement.",
+ limits:"Both are O(n^2) to O(n^3). High-degree polynomials are expensive.",
+ pitfall:"Companion matrix eigenvalues can be sensitive to coefficient perturbations. Balance the matrix first.",
+ question:"Why is the companion matrix useful for polynomial root finding?",
+ answer:"The eigenvalues of the companion matrix are exactly the roots of the polynomial. Any eigenvalue algorithm can be applied.",
+ demo:"none",sample:"",refs:[
+  ["Jenkins and Traub, A three-stage algorithm for real polynomials using quadratic iteration, SIAM J. Numer. Anal. 1970","https://doi.org/10.1137/0707046"],
+  ["Wilkinson, The Algebraic Eigenvalue Problem, Oxford 1965","https://global.oup.com/academic/product/the-algebraic-eigenvalue-problem-9780198534181"],
+  ["Wikipedia, Jenkins-Traub algorithm","https://en.wikipedia.org/wiki/Jenkins%E2%80%93Traub_algorithm"]]},
+/* Ch 8 */
+{id:"cordic",title:"CORDIC",level:4,kind:"Special functions",status:"Runnable teaching lab",
+ summary:"CORDIC computes trigonometric, hyperbolic and other functions using only shifts and additions. It was the standard algorithm on early calculators and is still used in FPGAs.",
+ mental:"Rotate a vector using only shifts and adds",
+ mentalText:"Rotate a 2D vector by a known sequence of angles. Each angle is chosen so the rotation is a shift and add. Correct the scale at the end.",
+ steps:["Start with the vector (1, 0) or (x, y).","For each i, decide the rotation direction based on the sign of the target angle.","Apply the rotation using only shifts and adds.","Accumulate the angle.","Multiply by the precomputed scale factor."],
+ pseudo:"CORDIC rotation (circular):\n  K = prod_i sqrt(1 + 2^(-2i))  (scale factor)\n  angles[i] = atan(2^(-i))\n\n  for i = 0, 1, 2, ...:\n    s = sign(target_angle - current_angle)\n    x' = x - s * y * 2^(-i)\n    y' = y + s * x * 2^(-i)\n    current_angle += s * angles[i]\n\n  after N iterations:\n    cos = x / K\n    sin = y / K\n\nConvergence: linear, one bit per iteration\n\nVariants:\n  linear CORDIC for multiplication\n  hyperbolic CORDIC for sinh, cosh, exp, log\n  square-root CORDIC",
+ uses:"Embedded systems, FPGAs, DSPs, calculators, old floating-point coprocessors.",
+ strength:"No multiplications. Hardware-efficient.",
+ limits:"Convergence is linear. Accuracy depends on the number of iterations.",
+ pitfall:"Forgetting the scale factor K. The output has to be divided by K at the end.",
+ question:"What operations does CORDIC use?",
+ answer:"Only shifts, additions and comparisons. No multiplications except for the final scale factor.",
+ demo:"cordic",sample:"45\n10",refs:[
+  ["Volder, The CORDIC trigonometric computing technique, IRE Trans. Electronic Computers 1959","https://doi.org/10.1109/TEC.1959.5222693"],
+  ["Muller, Elementary Functions: Algorithms and Implementation, Birkhäuser 2016","https://link.springer.com/book/10.1007/978-1-4899-7981-0"],
+  ["Wikipedia, CORDIC","https://en.wikipedia.org/wiki/CORDIC"]]},
+{id:"lanczos",title:"Lanczos gamma approximation",level:5,kind:"Special functions",status:"Runnable teaching lab",
+ summary:"The Lanczos approximation computes the gamma function using a finite series of coefficients. It is accurate to many digits and is widely used in libraries.",
+ mental:"A series that mimics gamma accurately",
+ mentalText:"Gamma is written as a scaled product of terms. A finite approximation with a small number of coefficients gives high accuracy.",
+ steps:["Choose the parameter g and the coefficients p_0, ..., p_n.","Compute the series sum.","Multiply by the exponential and power factors.","Return the result."],
+ pseudo:"Lanczos approximation:\n  Gamma(z) ~ sqrt(2 pi) (z + g - 0.5)^(z - 0.5) e^(-(z + g - 0.5))\n              * sum_{k=0}^{n} p_k / (z + k)\n\nConstants (g = 7, n = 8):\n  p_0 = 0.99999999999980993\n  p_1 = 676.5203681218851\n  ...\n\nReflection formula for z < 0.5:\n  Gamma(z) = pi / (sin(pi z) Gamma(1 - z))\n\nApplications:\n  factorial of non-integers\n  beta function\n  probability distributions (Gamma, Beta, Dirichlet)\n  Bessel functions",
+ uses:"Statistical libraries, physics, special function evaluation.",
+ strength:"High accuracy with few coefficients. Simple to implement.",
+ limits:"Requires the reflection formula for z < 0.5. Coefficients are tuned to a specific g.",
+ pitfall:"Using Lanczos for large z. The result overflows. Take logs or use Stirling's approximation.",
+ question:"What is the relationship between gamma and factorial?",
+ answer:"Gamma(n) = (n-1)! for positive integers n. The gamma function extends factorial to real and complex numbers.",
+ demo:"lanczos",sample:"0.5\n3.0\n5.0",refs:[
+  ["Lanczos, A precision approximation of the gamma function, J. SIAM Numer. Anal. 1964","https://doi.org/10.1137/0701020"],
+  ["Press et al., Numerical Recipes, Section 6.1","http://numerical.recipes/"],
+  ["Wikipedia, Lanczos approximation","https://en.wikipedia.org/wiki/Lanczos_approximation"]]},
+{id:"minimax",title:"Minimax and rational approximation",level:5,kind:"Approximation",status:"Concept lesson",
+ summary:"Minimax approximation minimizes the maximum absolute error over an interval. Rational approximation extends this to ratios of polynomials, giving higher accuracy for the same degree.",
+ mental:"The best possible approximation in the max norm",
+ mentalText:"Minimax approximations are optimal in the worst case. Rational approximations can fit functions with poles or sharp transitions better than polynomials.",
+ steps:["Choose a target accuracy.","Pick a polynomial or rational form.","Use Remez to find the minimax coefficients.","Check the error on the interval."],
+ pseudo:"Minimax polynomial:\n  min_p max_x |f(x) - p(x)|\n\nRational approximation:\n  min_{p, q} max_x |f(x) - p(x) / q(x)|\n\nSolved by the Remez exchange algorithm.\n\nEquioscillation:\n  the optimal error alternates in sign at n+2 points\n\nCommon uses:\n  special function approximations in libm\n  DSP filters\n  compiler constant folding\n  CUDA/Tensor core intrinsics\n\nAccuracy:\n  n-th degree polynomial: ~n + 1 digits typically\n  rational (n, m): often more accurate than either alone",
+ uses:"Standard math libraries, embedded math, signal processing.",
+ strength:"Best possible worst-case error for the chosen form.",
+ limits:"Rational approximations can have poles. The Remez algorithm is complex.",
+ pitfall:"Using a polynomial approximation of a function with a pole. The error explodes near the pole. Use a rational approximation.",
+ question:"What is equioscillation?",
+ answer:"The property of a minimax approximation where the error alternates in sign at n+2 points. It is a necessary condition for optimality in the Chebyshev norm.",
+ demo:"none",sample:"",refs:[
+  ["Remez, Sur la détermination des polynômes d'approximation de degré donnée, 1934","https://en.wikipedia.org/wiki/Remez_algorithm"],
+  ["Cody, Rational Chebyshev approximations for the error function, Math. Comp. 1969","https://doi.org/10.1090/S0025-5718-1969-0258221-4"],
+  ["Muller, Elementary Functions: Algorithms and Implementation, Birkhäuser 2016","https://link.springer.com/book/10.1007/978-1-4899-7981-0"]]},
+/* Ch 9 */
+{id:"euler",title:"Euler and midpoint methods",level:2,kind:"ODE solver",status:"Runnable teaching lab",
+ summary:"Euler's method takes a linear step along the derivative. The midpoint method evaluates the derivative at the midpoint for higher accuracy.",
+ mental:"Follow the slope, then correct",
+ mentalText:"Euler uses f(t_n, y_n) directly. Midpoint evaluates f at a half-step forward, giving second-order accuracy.",
+ steps:["Start at (t_0, y_0).","Euler: y_{n+1} = y_n + h f(t_n, y_n).","Midpoint: k1 = h f(t_n, y_n); k2 = h f(t_n + h/2, y_n + k1/2); y_{n+1} = y_n + k2.","Repeat."],
+ pseudo:"Euler's method:\n  y_{n+1} = y_n + h f(t_n, y_n)\n  error: O(h)\n\nMidpoint (RK2):\n  k1 = h f(t_n, y_n)\n  k2 = h f(t_n + h/2, y_n + k1/2)\n  y_{n+1} = y_n + k2\n  error: O(h^2)\n\nStability:\n  Euler is stable only for small h\n  Midpoint is more stable but still conditionally stable\n\nStep size:\n  smaller h gives more accuracy but more work\n  adaptive methods adjust h automatically",
+ uses:"Simulating dynamical systems, prototyping ODE solvers, teaching numerical integration.",
+ strength:"Simple. Easy to implement.",
+ limits:"Low-order accuracy. Euler is unstable for stiff problems.",
+ pitfall:"Euler is first-order. For accuracy, use RK4 or an adaptive method.",
+ question:"What is the order of accuracy of Euler's method?",
+ answer:"First order. The global error is O(h).",
+ demo:"euler-midpoint",sample:"0 1 2\n\n0.1",refs:[
+  ["Hairer, Norsett, Wanner, Solving Ordinary Differential Equations I, Springer 1993","https://link.springer.com/book/10.1007/978-3-540-78862-1"],
+  ["Butcher, Numerical Methods for Ordinary Differential Equations, Wiley 2016","https://www.wiley.com/en-us/Numerical+Methods+for+Ordinary+Differential+Equations%2C+3rd+Edition-p-9781119121503"],
+  ["Wikipedia, Euler method","https://en.wikipedia.org/wiki/Euler_method"]]},
+{id:"rk4",title:"Classical Runge-Kutta (RK4)",level:3,kind:"ODE solver",status:"Runnable teaching lab",
+ summary:"RK4 evaluates the derivative four times per step and combines the results with weights. Fourth-order accuracy without requiring derivatives.",
+ mental:"Sample the derivative at four points, then average",
+ mentalText:"Each step computes k1, k2, k3, k4. The combination has error O(h^5) per step and O(h^4) globally.",
+ steps:["Compute k1 = h f(t_n, y_n).","k2 = h f(t_n + h/2, y_n + k1/2).","k3 = h f(t_n + h/2, y_n + k2/2).","k4 = h f(t_n + h, y_n + k3).","y_{n+1} = y_n + (k1 + 2 k2 + 2 k3 + k4) / 6."],
+ pseudo:"Classical RK4:\n  k1 = h f(t, y)\n  k2 = h f(t + h/2, y + k1/2)\n  k3 = h f(t + h/2, y + k2/2)\n  k4 = h f(t + h,   y + k3)\n  y_new = y + (k1 + 2 k2 + 2 k3 + k4) / 6\n\nLocal error: O(h^5)\nGlobal error: O(h^4)\n\nVery popular because of its balance between simplicity and accuracy.",
+ uses:"General ODE integration, physics simulation, engineering, popular in teaching.",
+ strength:"Fourth order. Simple. Stable for many problems.",
+ limits:"Does not handle stiff problems. No built-in error estimate.",
+ pitfall:"Using RK4 for a stiff system. The step size is limited by stability, not accuracy. Use an implicit method.",
+ question:"Why is RK4 so popular?",
+ answer:"It gives fourth-order accuracy at four function evaluations per step, a good balance of cost and accuracy.",
+ demo:"rk4",sample:"0 1 2\n\n0.1",refs:[
+  ["Kutta, Beitrag zur näherungsweisen Integration totaler Differentialgleichungen, ZAMP 1901","https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods"],
+  ["Hairer, Norsett, Wanner, Solving ODE I, Chapter II","https://link.springer.com/book/10.1007/978-3-540-78862-1"],
+  ["Wikipedia, Runge-Kutta methods","https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods"]]},
+{id:"dormand-prince",title:"Adaptive Runge-Kutta and Dormand-Prince",level:5,kind:"ODE solver",status:"Concept lesson",
+ summary:"Adaptive RK methods use two embedded estimates to control step size. Dormand-Prince is the basis of MATLAB's ode45.",
+ mental:"Two answers per step, difference controls step size",
+ mentalText:"Each step produces a high-order and low-order estimate. The difference is the local error. Adjust h to keep the error near a tolerance.",
+ steps:["Compute two RK estimates with the same function evaluations.","Estimate local error from the difference.","Adjust h based on the target tolerance.","Take the higher-order estimate as the solution."],
+ pseudo:"Dormand-Prince (RK45):\n  7 stages, produces 4th and 5th order estimates.\n  Error estimate = difference between the two.\n\n  err = ||y5 - y4||\n  h_new = h * (tol / err)^(1/5)\n  Clamp h_new to [0.2 h, 5 h] to avoid abrupt changes.\n\nProperties:\n  FSAL: first-same-as-last, reuses k7 as next k1\n  6 evaluations per step (7th reused)\n\nUsed in:\n  MATLAB ode45\n  scipy.integrate.RK45\n  many ODE libraries",
+ uses:"General ODE integration when accuracy and efficiency both matter.",
+ strength:"Adaptive step size handles varying dynamics. FSAL saves work.",
+ limits:"Stiff problems need implicit methods. Implicit solvers handle them.",
+ pitfall:"Not setting a reasonable tolerance. Too tight wastes time, too loose loses accuracy.",
+ question:"What is FSAL?",
+ answer:"First-same-as-last. The last stage evaluation of one step is reused as the first stage of the next, saving one function evaluation per step.",
+ demo:"none",sample:"",refs:[
+  ["Dormand and Prince, A family of embedded Runge-Kutta formulae, J. Comput. Appl. Math. 1980","https://doi.org/10.1016/0771-050X\(80\90013-3)"],
+  ["Hairer, Norsett, Wanner, Solving ODE I, Section II.5","https://link.springer.com/book/10.1007/978-3-540-78862-1"],
+  ["scipy.integrate.RK45 documentation","https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.RK45.html"]]},
+{id:"symplectic",title:"Implicit Euler and symplectic integrators",level:5,kind:"ODE solver",status:"Runnable teaching lab",
+ summary:"Symplectic integrators preserve the geometric structure of Hamiltonian systems, giving good long-term energy behavior. Implicit Euler is stable for stiff problems.",
+ mental:"Respect the geometry, not just the accuracy",
+ mentalText:"Symplectic methods do not conserve energy exactly, but the energy error stays bounded over long times. Explicit methods drift.",
+ steps:["Implicit Euler: solve y_{n+1} = y_n + h f(t_{n+1}, y_{n+1}) for y_{n+1}.","Symplectic Euler: update q using p, then p using the new q.","Störmer-Verlet: leapfrog scheme for second-order systems.","Leapfrog is symplectic and second-order."],
+ pseudo:"Implicit Euler:\n  y_{n+1} = y_n + h f(t_{n+1}, y_{n+1})\n  solve with a nonlinear solver (Newton)\n  A-stable, good for stiff systems\n\nSymplectic Euler:\n  p_{n+1} = p_n - h dV/dq(q_n)\n  q_{n+1} = q_n + h dT/dp(p_{n+1})\n  1st order, symplectic\n\nStörmer-Verlet (leapfrog):\n  p_{n+1/2} = p_n - (h/2) dV/dq(q_n)\n  q_{n+1} = q_n + h dT/dp(p_{n+1/2})\n  p_{n+1} = p_{n+1/2} - (h/2) dV/dq(q_{n+1})\n  2nd order, symplectic\n\nLong-term behavior:\n  energy error bounded (oscillates but does not drift)\n\nUsed in molecular dynamics, orbital mechanics, plasma physics.",
+ uses:"Molecular dynamics, celestial mechanics, particle physics, long simulations.",
+ strength:"Bounded energy error over very long times.",
+ limits:"Only for Hamiltonian systems. Not for dissipative or stiff problems.",
+ pitfall:"Using a non-symplectic method for long-time integration. Energy drifts and the simulation becomes unphysical.",
+ question:"Why do symplectic integrators matter?",
+ answer:"They preserve the phase-space geometry of Hamiltonian systems, giving bounded energy error over long times. Explicit methods drift.",
+ demo:"symplectic",sample:"0 1 10\n\n0.05",refs:[
+  ["Hairer, Lubich, Wanner, Geometric Numerical Integration, Springer 2006","https://link.springer.com/book/10.1007/3-540-30666-8"],
+  ["Leimkuhler and Reich, Simulating Hamiltonian Dynamics, Cambridge 2004","https://www.cambridge.org/core/books/simulating-hamiltonian-dynamics/"],
+  ["Wikipedia, Symplectic integrator","https://en.wikipedia.org/wiki/Symplectic_integrator"]]},
+/* Ch 10 */
+{id:"finite-difference-pde",title:"Finite difference for PDEs",level:4,kind:"PDE solver",status:"Runnable teaching lab",
+ summary:"Finite difference methods approximate derivatives on a grid. They turn a PDE into a system of algebraic equations.",
+ mental:"Replace derivatives with differences on a grid",
+ mentalText:"Approximate u_xx by (u_{i+1} - 2 u_i + u_{i-1}) / h^2. Build a linear system and solve it.",
+ steps:["Discretize the domain into a grid.","Replace derivatives with finite differences.","Assemble the linear system.","Solve and post-process."],
+ pseudo:"Second derivative (central):\n  u_xx ~ (u_{i+1} - 2 u_i + u_{i-1}) / h^2\n\n1D Poisson: u_xx = f on [0, 1], u(0) = u(1) = 0\n  Tridiagonal system A u = f h^2\n  A = [[-2, 1, 0, ...], [1, -2, 1, ...], ...]\n\n2D Poisson: u_xx + u_yy = f\n  Five-point stencil\n  A is block tridiagonal\n\nConvergence: O(h^2) for the standard 5-point stencil\n\nStability: implicit schemes are stable for a wide range of h",
+ uses:"Fluid dynamics, heat transfer, wave propagation, electromagnetics.",
+ strength:"Simple. Well understood. Easy to implement.",
+ limits:"Complex geometries are hard. High-order stencils needed for accuracy.",
+ pitfall:"Explicit time-stepping requires small time steps for stability. Use implicit or Crank-Nicolson for larger steps.",
+ question:"How accurate is the central second-difference approximation?",
+ answer:"Second-order accurate. The error is O(h^2).",
+ demo:"poisson1d",sample:"10\n1.0",refs:[
+  ["LeVeque, Finite Difference Methods for Ordinary and Partial Differential Equations, SIAM 2007","https://epubs.siam.org/doi/book/10.1137/1.9780898717839"],
+  ["Strikwerda, Finite Difference Schemes and Partial Differential Equations, SIAM 2004","https://epubs.siam.org/doi/book/10.1137/1.9780898717938"],
+  ["Wikipedia, Finite difference method","https://en.wikipedia.org/wiki/Finite_difference_method"]]},
+{id:"crank-nicolson",title:"Crank-Nicolson and stability",level:5,kind:"PDE solver",status:"Runnable teaching lab",
+ summary:"Crank-Nicolson averages the explicit and implicit Euler steps. It is second-order accurate in time and unconditionally stable for the heat equation.",
+ mental:"Average the old and new derivative",
+ mentalText:"Each time step uses a linear combination of the spatial operator at the old and new time levels. This gives second-order accuracy and stability.",
+ steps:["Discretize space.","At each time step, solve (I - h/2 L) u^{n+1} = (I + h/2 L) u^n.","This is a tridiagonal system in 1D.","Solve with the Thomas algorithm."],
+ pseudo:"Crank-Nicolson for the heat equation:\n  (u^{n+1} - u^n) / dt = 0.5 (L u^{n+1} + L u^n)\n\n  (I - dt/2 L) u^{n+1} = (I + dt/2 L) u^n\n\nProperties:\n  A-stable\n  second-order in time\n  unconditionally stable for the heat equation\n\nCFL condition:\n  explicit schemes require dt <= h^2 / (2 alpha)\n  Crank-Nicolson has no such restriction\n\nCost:\n  tridiagonal solve per step: O(n)\n  in 2D: O(n^2) per step with LU factorization",
+ uses:"Diffusion, option pricing (Black-Scholes), heat conduction.",
+ strength:"Unconditionally stable. Second-order in time.",
+ limits:"Can oscillate for very large time steps.",
+ pitfall:"Crank-Nicolson can produce non-physical oscillations when the initial condition is not smooth. Use Rannacher smoothing.",
+ question:"Why is Crank-Nicolson more expensive per step than explicit Euler?",
+ answer:"It requires solving a linear system at each step. Explicit Euler is just a matrix-vector product.",
+ demo:"heat1d",sample:"20\n100\n0.5",refs:[
+  ["Crank and Nicolson, A practical method for numerical evaluation of solutions of partial differential equations of the heat-conduction type, Proc. Cambridge Phil. Soc. 1947","https://doi.org/10.1017/S0305004100023197"],
+  ["LeVeque, Finite Difference Methods, Chapter 2","https://epubs.siam.org/doi/book/10.1137/1.9780898717839"],
+  ["Wikipedia, Crank-Nicolson method","https://en.wikipedia.org/wiki/Crank%E2%80%93Nicolson_method"]]},
+{id:"cfl-multigrid",title:"CFL condition and multigrid",level:5,kind:"PDE solver",status:"Concept lesson",
+ summary:"The CFL condition limits the time step for explicit schemes. Multigrid solves PDEs by iterating on a hierarchy of grids, achieving optimal O(n) complexity.",
+ mental:"Speed of information propagation versus grid spacing",
+ mentalText:"The CFL condition says the numerical domain of dependence must contain the physical one. Multigrid uses coarse grids to smooth low-frequency error quickly.",
+ steps:["CFL: choose dt so the numerical wave speed does not exceed the grid."],
+ pseudo:"CFL condition:\n  For the advection equation u_t + a u_x = 0\n  dt <= dx / |a|\n\n  For diffusion: dt <= dx^2 / (2 alpha)\n\n  General: CFL number = |a| dt / dx <= 1\n\nConsequences:\n  explicit advection: dt scales with dx\n  explicit diffusion: dt scales with dx^2\n  implicit: no such restriction (but per-step cost is higher)\n\nMultigrid:\n  V-cycle: restrict to coarse, smooth, prolong back\n  F-cycle, W-cycle: more work per cycle\n  Full multigrid: start at coarsest grid\n\nComplexity: O(n) for n grid points\n\nOther methods:\n  domain decomposition, spectral methods, discontinuous Galerkin",
+ uses:"Computational fluid dynamics, weather prediction, structural mechanics, electromagnetics.",
+ strength:"Multigrid is optimal for many PDEs. CFL condition guides step size.",
+ limits:"Multigrid is complex to implement for general geometries.",
+ pitfall:"Violating the CFL condition causes instability and blow-up. Choose dt based on the fastest wave speed.",
+ question:"Why does the CFL condition depend on the grid spacing?",
+ answer:"Information cannot travel faster than the grid. If a wave crosses more than one cell per time step, the numerical scheme cannot capture it.",
+ demo:"none",sample:"",refs:[
+  ["Courant, Friedrichs, Lewy, Über die partiellen Differenzengleichungen der mathematischen Physik, Math. Ann. 1928","https://doi.org/10.1007/BF01448839"],
+  ["Brandt, Multi-level adaptive solutions to boundary-value problems, Math. Comp. 1977","https://doi.org/10.1090/S0025-5718-1977-0431719-X"],
+  ["Trottenberg, Oosterlee, Schuller, Multigrid, Academic Press 2001","https://www.elsevier.com/books/multigrid/trottenberg/978-0-12-701070-0"]]},
+/* Ch 11 */
+{id:"fft",title:"Fast Fourier Transform (Cooley-Tukey)",level:4,kind:"Signal",status:"Runnable teaching lab",
+ summary:"The FFT computes the discrete Fourier transform in O(n log n) instead of O(n^2). The Cooley-Tukey algorithm splits the DFT into two halves recursively.",
+ mental:"Divide and conquer on the frequency axis",
+ mentalText:"Split the input into even and odd indices. Compute the DFT of each half. Combine using the twiddle factors.",
+ steps:["Split the input into even and odd indices.","Recursively compute the DFT of each half.","Combine: X_k = E_k + w^k O_k, X_{k+n/2} = E_k - w^k O_k.","Repeat until the size is 1."],
+ pseudo:"Cooley-Tukey FFT:\n  input: x_0, ..., x_{n-1}, n = 2^m\n\n  E_k = DFT(x_even)[k]\n  O_k = DFT(x_odd)[k]\n  w = exp(-2 pi i / n)\n  X_k = E_k + w^k O_k  for k = 0..n/2-1\n  X_{k+n/2} = E_k - w^k O_k\n\nComplexity: O(n log n)\nSpace: O(n) (in-place possible)\n\nVariants:\n  radix-2, radix-4, split-radix (fewer multiplications)\n  Bluestein for arbitrary sizes\n  mixed-radix for composite sizes\n  real-to-complex (R2C) for real inputs",
+ uses:"Signal processing, image processing, polynomial multiplication, solving PDEs, ML (convolutional layers).",
+ strength:"Dramatic speedup over the direct DFT. Foundational algorithm.",
+ limits:"Requires power-of-2 or factorable sizes for the standard implementation.",
+ pitfall:"Wrong twiddle factor sign. Forward FFT uses exp(-2 pi i / n); inverse uses exp(+2 pi i / n) plus division by n.",
+ question:"How much faster is the FFT than the DFT for n = 1024?",
+ answer:"About 100x. The DFT is about 10^6 operations; the FFT is about 10^4.",
+ demo:"fft",sample:"1 2 3 4 5 6 7 8",refs:[
+  ["Cooley and Tukey, An algorithm for the machine calculation of complex Fourier series, Math. Comp. 1965","https://doi.org/10.1090/S0025-5718-1965-0178586-1"],
+  ["Oppenheim and Schafer, Discrete-Time Signal Processing, Pearson 2010","https://www.pearson.com/en-us/subject-catalog/p/discrete-time-signal-processing/P200000003295"],
+  ["Wikipedia, Fast Fourier transform","https://en.wikipedia.org/wiki/Fast_Fourier_transform"]]},
+{id:"split-radix",title:"Split-radix and Good-Thomas FFT",level:5,kind:"Signal",status:"Concept lesson",
+ summary:"Split-radix reduces the number of multiplications in the FFT. Good-Thomas (prime factor algorithm) avoids twiddle factors entirely for coprime factors.",
+ mental:"Fewer operations for the same DFT",
+ mentalText:"Split-radix mixes radix-2 and radix-4. Good-Thomas reindexes the input so the DFT becomes a true multidimensional transform.",
+ steps:["Split-radix: at each level, split into one radix-2 and two radix-4 subproblems.","Good-Thomas: factor n = n_1 n_2 with gcd(n_1, n_2) = 1.","Reindex the input with the Chinese remainder theorem.","Apply DFTs of size n_1 and n_2 without twiddle factors."],
+ pseudo:"Split-radix FFT:\n  Splits n = 2^m into subproblems of size n/2 and two of size n/4\n  Total multiplications: ~4/3 n log2 n\n  Radix-2: 2 n log2 n\n  Radix-4: ~2.75 n log2 n\n  Split-radix is optimal in this family\n\nGood-Thomas (PFA):\n  n = n_1 n_2, gcd(n_1, n_2) = 1\n  Use the CRT to map indices (k, l) -> (k mod n_1, k mod n_2)\n  X[k] = sum_{n_1} sum_{n_2} x[CRT(n_1, n_2)] w_1^(n_1 k_1) w_2^(n_2 k_2)\n  No twiddle factors between stages.\n\nUsed in:\n  high-performance FFT libraries (FFTW, Intel MKL)\n  embedded DSP",
+ uses:"High-performance FFT, DSP, image processing, numerical PDE solvers.",
+ strength:"Fewer operations. Better cache behavior in some cases.",
+ limits:"Implementation is complex. Splitting into factors requires care.",
+ pitfall:"Assuming the split always reduces operations. For small n, the overhead can dominate.",
+ question:"Why does Good-Thomas avoid twiddle factors?",
+ answer:"It uses the Chinese remainder theorem to map the DFT into a true multidimensional DFT, so no cross-factor twiddles are needed.",
+ demo:"none",sample:"",refs:[
+  ["Duhamel and Hollmann, Split radix FFT algorithm, Electronics Letters 1984","https://doi.org/10.1049/el:19840004"],
+  ["Good, The interaction algorithm and practical Fourier analysis, JRSS B 1958","https://www.jstor.org/stable/2983895"],
+  ["Frigo and Johnson, The design and implementation of FFTW3, Proc. IEEE 2005","https://doi.org/10.1109/JPROC.2004.840301"]]},
+{id:"autodiff-mixed",title:"Automatic differentiation and mixed precision",level:5,kind:"Signal",status:"Runnable teaching lab",
+ summary:"Automatic differentiation computes exact derivatives of any program by tracking operations. Mixed precision combines float32 and float16 to speed up training and inference.",
+ mental:"Exact derivatives, cheaper and faster numbers",
+ mentalText:"Autodiff builds a computation graph and applies the chain rule. Mixed precision uses lower precision where it is safe and keeps a master copy in float32.",
+ steps:["Autodiff: forward pass, record operations, backward pass with the chain rule.","Forward mode: propagate derivatives alongside values.","Reverse mode: build the graph, then backprop.","Mixed precision: cast to fp16/bf16 for compute, keep fp32 master weights."],
+ pseudo:"Forward-mode autodiff:\n  dual numbers: x + eps dx, compute with dual arithmetic\n  gives one directional derivative per pass\n  cost scales with the number of inputs\n\nReverse-mode autodiff (backprop):\n  forward pass: compute values, save intermediates\n  backward pass: propagate gradients in reverse\n  cost: about 2x forward, independent of the number of parameters\n\nMixed precision:\n  bf16/fp16 for activations and weights (2x memory savings, 2x speed on modern GPUs)\n  fp32 master copy for the weights\n  loss scaling to prevent underflow\n\nbf16 vs fp16:\n  bf16 has 8 exponent bits (same range as fp32)\n  fp16 has 5 exponent bits (smaller range, needs scaling)\n  bf16 is now the default in most frameworks",
+ uses:"Training and inference of ML models, optimization, sensitivity analysis, scientific computing.",
+ strength:"Autodiff is exact and general. Mixed precision gives big speedups.",
+ limits:"Reverse-mode memory grows with the computation graph.",
+ pitfall:"Not using loss scaling with fp16. Gradients underflow to zero.",
+ question:"Why is bf16 often preferred over fp16 in deep learning?",
+ answer:"bf16 has the same exponent range as fp32, so no loss scaling is needed. fp16 needs scaling because of its smaller exponent.",
+ demo:"autodiff-mixed",sample:"2\n1.0\n1.0",refs:[
+  ["Baydin et al., Automatic differentiation in machine learning: a survey, JMLR 2018","https://jmlr.org/papers/v18/17-468.html"],
+  ["Micikevicius et al., Mixed precision training, ICLR 2018","https://arxiv.org/abs/1710.03740"],
+  ["Griewank and Walther, Evaluating Derivatives: Principles and Techniques of Algorithmic Differentiation, SIAM 2008","https://epubs.siam.org/doi/book/10.1137/1.9780898717761"]]}
+];
+
+const LESSONS=RAW.map(mk);
+const byId=Object.fromEntries(LESSONS.map(x=>[x.id,x]));
+
+/* ============================================================
+   Code examples
+   ============================================================ */
+const CODE={
+ "ieee754":{python:`import struct\nimport math\n\n\ndef bits(x):\n    return "".join(f"{b:08b}" for b in struct.pack(">d", x))\n\n\ndef describe(x):\n    b = bits(x)\n    sign = int(b[0], 2)\n    exp = int(b[1:12], 2)\n    frac = int(b[12:], 2) / 2**52\n    bias = 1023\n    print(f"x = {x!r}")\n    print(f"  sign = {sign}")\n    print(f"  biased exponent = {exp}")\n    print(f"  fraction = {frac:.16f}")\n    if 0 < exp < 2047:\n        value = (-1)**sign * (1 + frac) * 2**(exp - bias)\n        print(f"  value = {value!r}")\n\n\ndescribe(0.1)\ndescribe(1.0)\ndescribe(-2.5)\nprint()\nprint("epsilon:", 2**-52)\nprint("0.1 + 0.2 =", 0.1 + 0.2)\n`},
+ "cancellation":{python:`import math\n\n# Catastrophic cancellation example\nx = 1e-8\nnaive = (1 - math.cos(x)) / x**2\nstable = 2 * math.sin(x/2)**2 / x**2\nprint(f"naive  = {naive:.16f}")\nprint(f"stable = {stable:.16f}")\nprint(f"difference = {abs(naive - stable):.3e}")\n\n# Another example: quadratic formula\n# x^2 + b x + c = 0 with b >> c\ndef unstable_root(b, c):\n    return (-b + math.sqrt(b*b - 4*c)) / 2\n\ndef stable_root(b, c):\n    return 2*c / (-b - math.sqrt(b*b - 4*c))\n\nb, c = 1e8, 1.0\nprint()\nprint(f"unstable = {unstable_root(b, c):.16f}")\nprint(f"stable   = {stable_root(b, c):.16f}")\n`},
+ "error-propagation":{python:`import math\n\n# Condition number of a function\ndef cond(f, fp, x):\n    return abs(x * fp(x) / f(x))\n\nf = lambda x: math.log(x)\nfp = lambda x: 1 / x\nfor x in [1.1, 10, 1e10]:\n    print(f"x = {x}, cond = {cond(f, fp, x):.3f}")\n\n# Forward error vs condition number\ndef forward_error(f, fp, x, eps):\n    return abs(f(x * (1 + eps)) - f(x)) / abs(f(x))\n\nx = 10.0\neps = 1e-10\nprint()\nprint(f"forward error = {forward_error(f, fp, x, eps):.3e}")\nprint(f"bound = kappa * eps = {cond(f, fp, x) * eps:.3e}")\n`},
+ "kahan":{python:`def kahan_sum(data):\n    s = 0.0\n    c = 0.0\n    for x in data:\n        y = x - c\n        t = s + y\n        c = (t - s) - y\n        s = t\n    return s\n\n\ndef neumaier_sum(data):\n    s = 0.0\n    c = 0.0\n    for x in data:\n        t = s + x\n        if abs(s) >= abs(x):\n            c += (s - t) + x\n        else:\n            c += (x - t) + s\n        s = t\n    return s + c\n\n\n# Data where naive sum loses precision\ndata = [1e16] + [1.0] * 10 + [-1e16]\nprint("naive    =", sum(data))\nprint("kahan    =", kahan_sum(data))\nprint("neumaier =", neumaier_sum(data))\nprint("expected = 10.0")\n`},
+ "pairwise":{python:`def pairwise_sum(a, lo, hi, threshold=8):\n    n = hi - lo\n    if n <= threshold:\n        s = 0.0\n        for i in range(lo, hi):\n            s += a[i]\n        return s\n    mid = (lo + hi) // 2\n    return pairwise_sum(a, lo, mid, threshold) + pairwise_sum(a, mid, hi, threshold)\n\n\ndata = [1e16] + [1.0] * 10 + [-1e16]\nprint("naive     =", sum(data))\nprint("pairwise  =", pairwise_sum(data, 0, len(data)))\nprint("expected  = 10.0")\n`},
+ "interval":{python:`# interval arithmetic (basic)\nclass Interval:\n    def __init__(self, lo, hi):\n        if lo > hi:\n            raise ValueError("invalid interval")\n        self.lo = lo\n        self.hi = hi\n    def __add__(self, other):\n        return Interval(self.lo + other.lo, self.hi + other.hi)\n    def __sub__(self, other):\n        return Interval(self.lo - other.hi, self.hi - other.lo)\n    def __mul__(self, other):\n        products = [\n            self.lo * other.lo, self.lo * other.hi,\n            self.hi * other.lo, self.hi * other.hi,\n        ]\n        return Interval(min(products), max(products))\n    def __repr__(self):\n        return f"[{self.lo}, {self.hi}]"\n\n\na = Interval(1.0, 2.0)\nb = Interval(0.5, 1.5)\nprint("a + b =", a + b)\nprint("a - b =", a - b)\nprint("a * b =", a * b)\n`},
+ "bisection":{python:`def bisect(f, a, b, tol=1e-10, max_iter=100):\n    fa, fb = f(a), f(b)\n    if fa * fb >= 0:\n        raise ValueError("no sign change")\n    for _ in range(max_iter):\n        c = (a + b) / 2\n        fc = f(c)\n        if abs(fc) < tol or (b - a) / 2 < tol:\n            return c\n        if fa * fc < 0:\n            b, fb = c, fc\n        else:\n            a, fa = c, fc\n    return c\n\n\nprint(bisect(lambda x: x**2 - 2, 1, 2))\nprint(bisect(lambda x: x**3 - 6*x**2 + 11*x - 6, 2.5, 4))\n`},
+ "newton":{python:`def newton(f, fp, x0, tol=1e-10, max_iter=50):\n    x = x0\n    for _ in range(max_iter):\n        fx = f(x)\n        fpx = fp(x)\n        if abs(fpx) < 1e-15: break\n        dx = fx / fpx\n        x -= dx\n        if abs(dx) < tol or abs(fx) < tol:\n            return x\n    return x\n\n\nprint(newton(lambda x: x**2 - 2, lambda x: 2*x, 1.0))\nprint(newton(lambda x: x**3 - 6*x**2 + 11*x - 6, lambda x: 3*x**2 - 12*x + 11, 2.5))\n`},
+ "secant":{python:`def secant(f, x0, x1, tol=1e-10, max_iter=50):\n    f0, f1 = f(x0), f(x1)\n    for _ in range(max_iter):\n        if abs(f1 - f0) < 1e-15: break\n        x2 = x1 - f1 * (x1 - x0) / (f1 - f0)\n        x0, f0 = x1, f1\n        x1, f1 = x2, f(x2)\n        if abs(x1 - x0) < tol or abs(f1) < tol:\n            return x1\n    return x1\n\n\nprint(secant(lambda x: x**2 - 2, 1.0, 2.0))\n`},
+ "brent":{python:`# scipy has a production Brent implementation\ntry:\n    from scipy.optimize import brentq\n    print(brentq(lambda x: x**2 - 2, 1, 2))\n    print(brentq(lambda x: x**3 - 6*x**2 + 11*x - 6, 2.5, 4))\nexcept ImportError:\n    print("Install scipy to run Brent's method from the library.")\n    print("Otherwise see Numerical Recipes in C for a from-scratch implementation.")\n`},
+ "fixed-point":{python:`import math\n\n# Iteration x = (x + 2/x) / 2 converges to sqrt(2)\ndef g(x):\n    return (x + 2 / x) / 2\n\nx = 1.0\nfor k in range(20):\n    x = g(x)\n    print(f"iter {k+1}: x = {x:.16f}")\nprint(f"sqrt(2) = {math.sqrt(2):.16f}")\n`},
+ "levenberg":{python:`import numpy as np\n\n# Fit y = a * exp(b * x) + c to data using Levenberg-Marquardt\nX = np.array([0.0, 1.0, 2.0, 3.0, 4.0])\ny = np.array([2.0, 2.7, 3.7, 5.0, 6.8])\n\ndef residuals(params):\n    a, b, c = params\n    return a * np.exp(b * X) + c - y\n\ndef jacobian(params):\n    a, b, c = params\n    J = np.zeros((len(X), 3))\n    J[:, 0] = np.exp(b * X)\n    J[:, 1] = a * X * np.exp(b * X)\n    J[:, 2] = 1.0\n    return J\n\nparams = np.array([1.0, 0.5, 1.0])\nlam = 1e-3\nfor it in range(100):\n    r = residuals(params)\n    J = jacobian(params)\n    A = J.T @ J + lam * np.eye(3)\n    g = J.T @ r\n    step = np.linalg.solve(A, -g)\n    new_params = params + step\n    if np.sum(residuals(new_params)**2) < np.sum(r**2):\n        params = new_params\n        lam = max(lam / 3, 1e-10)\n    else:\n        lam *= 2\nprint("fitted:", params)\n`},
+ "linear-spline":{python:`# Linear and cubic spline interpolation\nx = [0, 1, 2, 3, 4]\ny = [0, 1, 4, 9, 16]\n\n\ndef linear_interp(xp, xp_points, yp_points):\n    for i in range(len(xp_points) - 1):\n        if xp_points[i] <= xp <= xp_points[i + 1]:\n            t = (xp - xp_points[i]) / (xp_points[i + 1] - xp_points[i])\n            return yp_points[i] + t * (yp_points[i + 1] - yp_points[i])\n    return None\n\n\nprint("linear at 1.5:", linear_interp(1.5, x, y))\nprint("linear at 2.7:", linear_interp(2.7, x, y))\n\n# scipy has a production implementation\ntry:\n    from scipy.interpolate import CubicSpline\n    cs = CubicSpline(x, y)\n    print("spline at 1.5:", cs(1.5))\n    print("spline at 2.7:", cs(2.7))\nexcept ImportError:\n    print("Install scipy for cubic splines.")\n`},
+ "chebyshev":{python:`import numpy as np\n\n# Chebyshev nodes on [-1, 1]\ndef cheb_nodes(n):\n    return np.cos(np.pi * (np.arange(n) + 0.5) / n)\n\n# Chebyshev polynomials via recurrence\ndef cheb_T(n, x):\n    if n == 0: return np.ones_like(x)\n    if n == 1: return x\n    T0, T1 = np.ones_like(x), x\n    for k in range(2, n + 1):\n        T0, T1 = T1, 2 * x * T1 - T0\n    return T1\n\nnodes = cheb_nodes(10)\nprint("Chebyshev nodes:", np.round(nodes, 4))\nprint("T_5 at 0.5:", cheb_T(5, 0.5))\nprint("T_10 at -0.3:", cheb_T(10, -0.3))\n`},
+ "finite-differences":{python:`import math\n\nf = math.sin\nfp_true = math.cos\nx = 1.0\n\n# Forward difference\nfor h in [1e-4, 1e-6, 1e-8]:\n    fp = (f(x + h) - f(x)) / h\n    print(f"forward h={h:.0e}: {fp:.16f}  err={abs(fp - fp_true(x)):.3e}")\n\n# Central difference\nfor h in [1e-4, 1e-6, 1e-8]:\n    fp = (f(x + h) - f(x - h)) / (2 * h)\n    print(f"central h={h:.0e}: {fp:.16f}  err={abs(fp - fp_true(x)):.3e}")\n\n# Complex step\nfor h in [1e-10, 1e-20]:\n    fp = (f(x + 1j * h)).imag / h\n    print(f"complex h={h:.0e}: {fp:.16f}  err={abs(fp - fp_true(x)):.3e}")\n`},
+ "richardson":{python:`import math\n\nf = math.sin\nfp_true = math.cos\nx = 1.0\n\ndef D(h):\n    return (f(x + h) - f(x - h)) / (2 * h)\n\n# Richardson extrapolation\nh = 0.1\nfor k in range(5):\n    D1 = D(h)\n    D2 = D(h / 2)\n    R = (4 * D2 - D1) / 3\n    print(f"h = {h:.4f}: D1 err={abs(D1 - fp_true(x)):.3e}, R err={abs(R - fp_true(x)):.3e}")\n    h /= 2\n`},
+ "quadrature":{python:`import math\n\n# Integrate f(x) = sin(x) from 0 to pi\ndef f(x):\n    return math.sin(x)\n\n# Trapezoid rule\ndef trapezoid(a, b, n):\n    h = (b - a) / n\n    s = 0.5 * (f(a) + f(b))\n    for i in range(1, n):\n        s += f(a + i * h)\n    return h * s\n\n# Simpson's rule (n even)\ndef simpson(a, b, n):\n    if n % 2: n += 1\n    h = (b - a) / n\n    s = f(a) + f(b)\n    for i in range(1, n):\n        s += 4 * f(a + i * h) if i % 2 else 2 * f(a + i * h)\n    return h * s / 3\n\nfor n in [10, 100]:\n    t = trapezoid(0, math.pi, n)\n    s = simpson(0, math.pi, n)\n    print(f"n = {n:3d}: trapezoid err = {abs(t - 2):.3e}, simpson err = {abs(s - 2):.3e}")\n`},
+ "gauss-quad":{python:`import numpy as np\n\n# Gauss-Legendre nodes and weights for n = 5\nnodes = np.array([\n    -0.9061798459386640,\n    -0.5384693101056831,\n     0.0,\n     0.5384693101056831,\n     0.9061798459386640,\n])\nweights = np.array([\n    0.2369268850561891,\n    0.4786286704993665,\n    0.5688888888888889,\n    0.4786286704993665,\n    0.2369268850561891,\n])\n\ndef integrate_gauss(f, a, b):\n    # map from [-1, 1] to [a, b]\n    mid = 0.5 * (a + b)\n    half = 0.5 * (b - a)\n    return half * sum(w * f(mid + half * x) for x, w in zip(nodes, weights))\n\n# Integrate sin(x) on [0, pi] -> 2\nprint("integral of sin on [0, pi]:", integrate_gauss(np.sin, 0, np.pi))\n# Integrate x^4 on [0, 1] -> 0.2\nprint("integral of x^4 on [0, 1]:", integrate_gauss(lambda x: x**4, 0, 1))\n`},
+ "horner":{python:`def horner(coeffs, x):\n    result = coeffs[0]\n    for c in coeffs[1:]:\n        result = result * x + c\n    return result\n\n# p(x) = 1 - 3x + 2x^2\ncoeffs = [2, -3, 1]  # highest first\nfor x in [0, 1, 2]:\n    print(f"p({x}) = {horner(coeffs, x)}")\n\n# derivative via synthetic division\ndef horner_and_derivative(coeffs, x):\n    p = coeffs[0]\n    dp = 0\n    for c in coeffs[1:]:\n        dp = dp * x + p\n        p = p * x + c\n    return p, dp\n\nprint("p(2) and p'(2):", horner_and_derivative(coeffs, 2))\n`},
+ "cordic":{python:`import math\n\n# CORDIC rotation to compute sin and cos of an angle\ndef cordic(angle, iters=20):\n    K = 1.0\n    for i in range(iters):\n        K *= math.sqrt(1 + 2**(-2 * i))\n    angles = [math.atan(2**(-i)) for i in range(iters)]\n\n    x, y = 1.0, 0.0\n    theta = 0.0\n    for i in range(iters):\n        s = 1 if angle > theta else -1\n        x, y = x - s * y * 2**(-i), y + s * x * 2**(-i)\n        theta += s * angles[i]\n    return x / K, y / K\n\nfor deg in [0, 30, 45, 60, 90]:\n    c, s = cordic(math.radians(deg))\n    print(f"{deg:>3} deg: cos={c:.6f}, sin={s:.6f}")\n`},
+ "lanczos":{python:`import math\n\n# Lanczos approximation of the gamma function (g = 7, n = 9)\nG = 7\nCOEFFS = [\n    0.99999999999980993,\n    676.5203681218851,\n    -1259.1392167224028,\n    771.32342877765313,\n    -176.61502916214059,\n    12.507343278686905,\n    -0.13857109526572012,\n    9.9843695780195716e-6,\n    1.5056327351493116e-7,\n]\n\n\ndef gamma(z):\n    if z < 0.5:\n        return math.pi / (math.sin(math.pi * z) * gamma(1 - z))\n    z -= 1\n    x = COEFFS[0]\n    for i in range(1, G + 2):\n        x += COEFFS[i] / (z + i)\n    t = z + G + 0.5\n    return math.sqrt(2 * math.pi) * t ** (z + 0.5) * math.exp(-t) * x\n\n\nfor z in [0.5, 1.0, 2.5, 5.0, 10.0]:\n    print(f"Gamma({z}) = {gamma(z):.10f}")\nprint("Gamma(0.5) should be sqrt(pi) =", math.sqrt(math.pi))\n`},
+ "euler-midpoint":{python:`import math\n\n# dy/dt = -y, y(0) = 1, exact y(t) = exp(-t)\ndef f(t, y):\n    return -y\n\ndef euler(y0, t0, t1, h):\n    n = int(round((t1 - t0) / h))\n    t, y = t0, y0\n    for _ in range(n):\n        y = y + h * f(t, y)\n        t += h\n    return y\n\ndef midpoint(y0, t0, t1, h):\n    n = int(round((t1 - t0) / h))\n    t, y = t0, y0\n    for _ in range(n):\n        k1 = h * f(t, y)\n        k2 = h * f(t + h / 2, y + k1 / 2)\n        y = y + k2\n        t += h\n    return y\n\nfor h in [0.1, 0.01, 0.001]:\n    e = euler(1.0, 0, 1, h)\n    m = midpoint(1.0, 0, 1, h)\n    print(f"h={h}: euler err={abs(e - math.exp(-1)):.3e}, midpoint err={abs(m - math.exp(-1)):.3e}")\n`},
+ "rk4":{python:`import math\n\n# dy/dt = -y, y(0) = 1, exact exp(-t)\ndef f(t, y):\n    return -y\n\ndef rk4(y0, t0, t1, h):\n    n = int(round((t1 - t0) / h))\n    t, y = t0, y0\n    for _ in range(n):\n        k1 = h * f(t, y)\n        k2 = h * f(t + h / 2, y + k1 / 2)\n        k3 = h * f(t + h / 2, y + k2 / 2)\n        k4 = h * f(t + h, y + k3)\n        y = y + (k1 + 2 * k2 + 2 * k3 + k4) / 6\n        t += h\n    return y\n\nfor h in [0.1, 0.01, 0.001]:\n    y = rk4(1.0, 0, 1, h)\n    print(f"h={h}: rk4 err={abs(y - math.exp(-1)):.3e}")\n`},
+ "symplectic":{python:`import math\n\n# Harmonic oscillator: dq/dt = p, dp/dt = -q\n# Exact solution: q(t) = cos(t), p(t) = -sin(t) starting from q(0)=1, p(0)=0\n\ndef symplectic_euler(q0, p0, h, n):\n    q, p = q0, p0\n    for _ in range(n):\n        p = p - h * q\n        q = q + h * p\n    return q, p\n\ndef leapfrog(q0, p0, h, n):\n    q, p = q0, p0\n    p = p - 0.5 * h * q\n    for _ in range(n):\n        q = q + h * p\n        p = p - h * q\n    p = p + 0.5 * h * q\n    return q, p\n\nt_end = 10.0\nh = 0.1\nn = int(t_end / h)\nexact = (math.cos(t_end), math.sin(-t_end))\nprint("exact:", exact)\nprint("symplectic Euler:", symplectic_euler(1, 0, h, n))\nprint("leapfrog:", leapfrog(1, 0, h, n))\n`},
+ "poisson1d":{python:`import numpy as np\n\n# Solve -u'' = f on [0, 1], u(0) = u(1) = 0, f = 1\n# Exact: u(x) = x(1-x)/2\nn = 20\nh = 1.0 / (n + 1)\nA = np.zeros((n, n))\nfor i in range(n):\n    A[i, i] = 2.0\n    if i > 0: A[i, i-1] = -1.0\n    if i < n-1: A[i, i+1] = -1.0\nb = np.ones(n) * h * h\nU = np.linalg.solve(A, b)\n\n# Compare to exact at a few points\nfor i in [0, n//2, n-1]:\n    x = (i + 1) * h\n    exact = x * (1 - x) / 2\n    print(f"i = {i:>2}, x = {x:.3f}, numerical = {U[i]:.6f}, exact = {exact:.6f}")\n`},
+ "heat1d":{python:`import numpy as np\n\n# 1D heat equation with Crank-Nicolson\n# u_t = u_xx on [0, 1], u(0, t) = u(1, t) = 0, u(x, 0) = sin(pi x)\n# Exact: u(x, t) = exp(-pi^2 t) sin(pi x)\n\nn = 20\nh = 1.0 / (n + 1)\ndt = 0.001\nT = 0.1\nsteps = int(T / dt)\n\nr = dt / (2 * h * h)\nmain = (1 + 2 * r) * np.ones(n)\noff = -r * np.ones(n - 1)\nA = np.diag(main) + np.diag(off, 1) + np.diag(off, -1)\nB = np.diag(1 - 2 * r) * np.ones((n, n))\nB += np.diag(r * np.ones(n - 1), 1) + np.diag(r * np.ones(n - 1), -1)\n\nx = np.linspace(h, 1 - h, n)\nu = np.sin(np.pi * x)\nfor _ in range(steps):\n    u = np.linalg.solve(A, B @ u)\n\n# Compare with exact\nexact = np.exp(-np.pi**2 * T) * np.sin(np.pi * x)\nprint("max error:", np.max(np.abs(u - exact)))\nprint("u[mid] =", u[n//2], "exact =", exact[n//2])\n`},
+ "fft":{python:`import numpy as np\n\n# Naive DFT vs FFT\nx = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)\n\n# FFT via numpy\nX = np.fft.fft(x)\nprint("FFT:", np.round(X, 3))\n\n# Inverse\nx_back = np.fft.ifft(X)\nprint("Inverse:", np.round(x_back, 3))\n\n# Naive DFT for comparison\ndef dft(x):\n    N = len(x)\n    n = np.arange(N)\n    k = n.reshape(-1, 1)\n    return np.exp(-2j * np.pi * k * n / N) @ x\n\nprint("DFT:", np.round(dft(x), 3))\nprint("Max diff:", np.max(np.abs(dft(x) - X)))\n`},
+ "autodiff-mixed":{python:`import torch\n\n# Reverse-mode autodiff via PyTorch\nx = torch.tensor([2.0, 3.0], requires_grad=True)\ny = (x ** 2).sum() + 5 * x[0] * x[1]\ny.backward()\nprint("gradient:", x.grad)\n# d/dx0 = 2*x0 + 5*x1 = 4 + 15 = 19\n# d/dx1 = 2*x1 + 5*x0 = 6 + 10 = 16\n\n# Mixed precision example\nmodel = torch.nn.Linear(10, 1)\nwith torch.autocast(device_type="cpu", dtype=torch.bfloat16):\n    out = model(torch.randn(4, 10))\nprint("output dtype under autocast:", out.dtype)\n`},
+};
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+const $=s=>document.querySelector(s);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function fmtNum(x,d=6){
+ if(!Number.isFinite(x))return String(x);
+ if(Math.abs(x)<1e-15)return '0';
+ if(Math.abs(x)>=1e6||Math.abs(x)<1e-4)return x.toExponential(d-1);
+ return parseFloat(x.toFixed(d)).toString();
+}
+function svgWrap(width,height,inner){
+ return `<svg class="plot" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
+}
+function plotFunction(fn,xMin,xMax,yMin,yMax,width=700,height=250,opts){
+ opts=opts||{};
+ const padL=45,padR=15,padT=15,padB=30;
+ const px=x=>padL+(x-xMin)/((xMax-xMin)||1)*(width-padL-padR);
+ const py=y=>height-padB-(y-yMin)/((yMax-yMin)||1)*(height-padT-padB);
+ let path='';
+ const N=400;
+ for(let i=0;i<=N;i++){
+  const x=xMin+(xMax-xMin)*i/N;
+  const y=fn(x);
+  if(!Number.isFinite(y))continue;
+  path+=(i===0?'M ':' L ')+px(x).toFixed(1)+' '+py(y).toFixed(1);
+ }
+ let out=`<line x1="${padL}" y1="${height-padB}" x2="${width-padR}" y2="${height-padB}" stroke="var(--line2)"/>`;
+ out+=`<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${height-padB}" stroke="var(--line2)"/>`;
+ out+=`<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
+ if(opts.points){
+  for(const p of opts.points){
+   out+=`<circle cx="${px(p[0]).toFixed(1)}" cy="${py(p[1]).toFixed(1)}" r="5" fill="${opts.pointColor||'var(--good)'}"/>`;
+  }
+ }
+ if(opts.zero){out+=`<line x1="${padL}" y1="${py(0).toFixed(1)}" x2="${width-padR}" y2="${py(0).toFixed(1)}" stroke="var(--line)" stroke-dasharray="3,3"/>`;}
+ out+=`<text x="${padL-6}" y="${py(yMax)+4}" text-anchor="end" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(yMax,2)}</text>`;
+ out+=`<text x="${padL-6}" y="${py(yMin)+4}" text-anchor="end" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(yMin,2)}</text>`;
+ out+=`<text x="${px(xMin)}" y="${height-padB+14}" text-anchor="middle" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(xMin,2)}</text>`;
+ out+=`<text x="${px(xMax)}" y="${height-padB+14}" text-anchor="middle" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(xMax,2)}</text>`;
+ return svgWrap(width,height,out);
+}
+function plotSeries(series,width=700,height=250,opts){
+ opts=opts||{};
+ const padL=45,padR=15,padT=15,padB=30;
+ const allX=series.flatMap(s=>s.x);
+ const allY=series.flatMap(s=>s.y);
+ const xMin=opts.xMin??Math.min(...allX);
+ const xMax=opts.xMax??Math.max(...allX);
+ const yMin=opts.yMin??Math.min(...allY);
+ const yMax=opts.yMax??Math.max(...allY);
+ const px=x=>padL+(x-xMin)/((xMax-xMin)||1)*(width-padL-padR);
+ const py=y=>height-padB-(y-yMin)/((yMax-yMin)||1)*(height-padT-padB);
+ const colors=['var(--accent)','var(--warn)','var(--good)','var(--bad)'];
+ let out=`<line x1="${padL}" y1="${height-padB}" x2="${width-padR}" y2="${height-padB}" stroke="var(--line2)"/>`;
+ out+=`<line x1="${padL}" y1="${padT}" x2="${padL}" y2="${height-padB}" stroke="var(--line2)"/>`;
+ series.forEach((s,i)=>{
+  let path='';
+  s.x.forEach((x,j)=>{path+=(j===0?'M ':' L ')+px(x).toFixed(1)+' '+py(s.y[j]).toFixed(1)});
+  out+=`<path d="${path}" fill="none" stroke="${colors[i%colors.length]}" stroke-width="2"/>`;
+ });
+ out+=`<text x="${padL-6}" y="${py(yMax)+4}" text-anchor="end" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(yMax,2)}</text>`;
+ out+=`<text x="${padL-6}" y="${py(yMin)+4}" text-anchor="end" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(yMin,2)}</text>`;
+ out+=`<text x="${px(xMin)}" y="${height-padB+14}" text-anchor="middle" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(xMin,2)}</text>`;
+ out+=`<text x="${px(xMax)}" y="${height-padB+14}" text-anchor="middle" font-size="10" fill="var(--subtle)" font-family="monospace">${fmtNum(xMax,2)}</text>`;
+ return svgWrap(width,height,out);
+}
+function parseNums(text){
+ const a=text.trim().split(/[\s,]+/).filter(Boolean).map(Number);
+ if(!a.length||a.some(x=>!Number.isFinite(x)))throw Error('Enter space or comma separated numbers.');
+ return a;
+}
+
+/* ============================================================
+   Labs
+   ============================================================ */
+function demoIeee754(text){
+ const values=parseNums(text);
+ const buf=new ArrayBuffer(8);
+ const dv=new DataView(buf);
+ const lines=values.map(v=>{
+  dv.setFloat64(0,v);
+  const bytes=[];
+  for(let i=0;i<8;i++)bytes.push(dv.getUint8(i).toString(16).padStart(2,'0'));
+  const f32buf=new ArrayBuffer(4);
+  new DataView(f32buf).setFloat32(0,v);
+  const f32bytes=[];
+  for(let i=0;i<4;i++)f32bytes.push(new DataView(f32buf).getUint8(i).toString(16).padStart(2,'0'));
+  return `value = ${v}\n  float64 hex = ${bytes.join(' ')}\n  float32 hex = ${f32bytes.join(' ')}`;
+ });
+ return{
+  encoded:`Machine epsilon (float64): ${Number.EPSILON}\nLargest float64: ${Number.MAX_VALUE}\nSmallest positive subnormal float64: ${Number.MIN_VALUE}\nSmallest positive normal float64: ${2.2250738585072014e-308}\n\n${lines.join('\n\n')}`,
+  decoded:`Each double is 8 bytes. The high bit is the sign, the next 11 bits are the exponent, and the low 52 bits are the fraction. float32 uses 1 + 8 + 23 bits.`
+ };
+}
+function demoCancellation(text){
+ const raw=text.trim()===''?1e-8:Number(text.trim());if(!Number.isFinite(raw)||raw===0)throw Error('Enter a finite non-zero x value.');const x=raw;
+ const naive=(1-Math.cos(x))/(x*x),stable=2*Math.pow(Math.sin(x/2),2)/(x*x),b=1e8,c=1;
+ const disc=Math.sqrt(b*b-4*c),unstable=(-b+disc)/2,stableRoot=2*c/(-b-disc);
+ return{encoded:`x = ${x}\n(1 − cos x) / x², direct form: ${naive.toPrecision(16)}\n2 sin²(x/2) / x², stable form: ${stable.toPrecision(16)}\nDifference: ${Math.abs(naive-stable).toExponential(3)}\n\nQuadratic x² + ${b}x + ${c} = 0\nSmall root, direct formula: ${unstable.toExponential(6)}\nSmall root, stable formula: ${stableRoot.toExponential(6)}`,
+  decoded:`The exact limit of (1 − cos x)/x² as x approaches zero is 1/2. For small x, cos(x) rounds close to 1, so subtracting it from 1 may lose nearly all useful digits. An algebraically equivalent expression avoids that cancellation.`};
+}
+function demoErrorPropagation(text){
+ const raw=text.trim()===''?10:Number(text.trim());if(!Number.isFinite(raw)||raw<=0)throw Error('Enter x greater than zero because this lab uses ln(x).');const x=raw,fx=Math.log(x),eps=1e-10;
+ if(Math.abs(fx)<1e-14)throw Error('At x = 1, ln(x) is zero and this relative condition-number formula is undefined. Try x = 10.');
+ const kappa=Math.abs(1/fx),forwardError=Math.abs(Math.log(x*(1+eps))-fx)/Math.abs(fx);
+ return{encoded:`f(x) = ln(x), x = ${x}\nf(x): ${fx}\nRelative condition number κ = |x f′(x) / f(x)|: ${kappa.toFixed(6)}\n\nRelative input perturbation: ${eps}\nMeasured relative forward error: ${forwardError.toExponential(3)}\nFirst-order estimate κ × ε: ${(kappa*eps).toExponential(3)}`,decoded:`The condition number estimates how strongly small relative input changes affect the output. It describes the problem, not the stability of a particular algorithm. The estimate is local and first-order.`};
+}
+function demoKahan(text){
+ const values=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean).map(Number);
+ if(!values.length||values.some(v=>!Number.isFinite(v)))throw Error('Enter finite numbers, one per line.');
+ const naive=values.reduce((sum,v)=>sum+v,0);
+ let sum=0,c=0;
+ for(const x of values){const y=x-c;const t=sum+y;c=(t-sum)-y;sum=t;}
+ let nSum=0,nC=0;
+ for(const x of values){const t=nSum+x;if(Math.abs(nSum)>=Math.abs(x))nC+=(nSum-t)+x;else nC+=(x-t)+nSum;nSum=t;}
+ const reference=nSum+nC;
+ return{
+  encoded:`Values: ${values.length}\n\nNaive sum:             ${naive.toExponential(15)}\nKahan sum:             ${sum.toExponential(15)}\nNeumaier reference:    ${reference.toExponential(15)}\n\nNaive vs reference:    ${Math.abs(naive-reference).toExponential(3)}\nKahan vs reference:    ${Math.abs(sum-reference).toExponential(3)}\n\nThe Neumaier result is a more accurate reference for this example, not a proof of the exact real sum.`,
+  decoded:`Kahan and Neumaier keep a correction for low-order information lost during addition. Neumaier is more robust when a new term is larger than the running sum. No floating-point summation method is exact for every input.`
+ };
+}
+function demoPairwise(text){
+ const values=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean).map(Number);
+ if(!values.length||values.some(v=>!Number.isFinite(v)))throw Error('Enter finite numbers, one per line.');
+ const naive=values.reduce((sum,v)=>sum+v,0);
+ function pairwise(a,lo,hi){if(hi-lo<=8){let s=0;for(let i=lo;i<hi;i++)s+=a[i];return s;}const mid=Math.floor((lo+hi)/2);return pairwise(a,lo,mid)+pairwise(a,mid,hi);}
+ let ref=0,c=0;for(const x of values){const t=ref+x;if(Math.abs(ref)>=Math.abs(x))c+=(ref-t)+x;else c+=(x-t)+ref;ref=t;}ref+=c;
+ const pair=pairwise(values,0,values.length);
+ return{
+  encoded:`Values: ${values.length}\nNaive sum:          ${naive.toExponential(15)}\nPairwise sum:       ${pair.toExponential(15)}\nNeumaier reference: ${ref.toExponential(15)}\n\nNaive vs reference:    ${Math.abs(naive-ref).toExponential(3)}\nPairwise vs reference:  ${Math.abs(pair-ref).toExponential(3)}\n\nThe reference is a compensated approximation, not an exact-arithmetic proof.`,
+  decoded:`Pairwise summation adds values in a balanced tree. Under standard floating-point assumptions, its error often grows like O(log n · ε), compared with O(n · ε) for straightforward sequential summation.`
+ };
+}
+function demoInterval(text){
+ const values=parseNums(text);if(values.length<2)throw Error('Enter two finite numbers.');
+ const nextUp=x=>{if(Number.isNaN(x)||x===Infinity)return x;if(x===0)return Number.MIN_VALUE;const d=new DataView(new ArrayBuffer(8));d.setFloat64(0,x);let b=d.getBigUint64(0);b+=x>0?1n:-1n;d.setBigUint64(0,b);return d.getFloat64(0);};
+ const nextDown=x=>-nextUp(-x);
+ const [a,b]=values;
+ const A={lo:nextDown(a-0.001),hi:nextUp(a+0.001)};
+ const B={lo:nextDown(b-0.001),hi:nextUp(b+0.001)};
+ const add={lo:nextDown(A.lo+B.lo),hi:nextUp(A.hi+B.hi)};
+ const sub={lo:nextDown(A.lo-B.hi),hi:nextUp(A.hi-B.lo)};
+ const products=[A.lo*B.lo,A.lo*B.hi,A.hi*B.lo,A.hi*B.hi];
+ const mul={lo:nextDown(Math.min(...products)),hi:nextUp(Math.max(...products))};
+ let divText='Division: undefined because the denominator interval contains zero.';
+ if(B.lo>0||B.hi<0){const quotients=[A.lo/B.lo,A.lo/B.hi,A.hi/B.lo,A.hi/B.hi];const div={lo:nextDown(Math.min(...quotients)),hi:nextUp(Math.max(...quotients))};divText=`A / B = [${fmtNum(div.lo,12)}, ${fmtNum(div.hi,12)}]`;}
+ return{
+  encoded:`A = [${fmtNum(A.lo,12)}, ${fmtNum(A.hi,12)}]\nB = [${fmtNum(B.lo,12)}, ${fmtNum(B.hi,12)}]\n\nA + B = [${fmtNum(add.lo,12)}, ${fmtNum(add.hi,12)}]\nA - B = [${fmtNum(sub.lo,12)}, ${fmtNum(sub.hi,12)}]\nA × B = [${fmtNum(mul.lo,12)}, ${fmtNum(mul.hi,12)}]\n${divText}`,
+  decoded:`This demo widens each result by one representable float in each direction to illustrate outward rounding. A fully verified interval library needs careful handling of every operation and exceptional value; this small demo is educational, not a formal proof system.`
+ };
+}
+function demoBisection(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+ const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ const a=get(0,1),b=get(1,2),tol=get(2,1e-10);
+ if(!(b>a))throw Error('The upper endpoint b must be greater than a.');if(!(tol>0))throw Error('Tolerance must be greater than zero.');
+ const f=x=>x*x-2;let lo=a,hi=b,fl=f(lo),fh=f(hi);
+ if(fl===0)return{encoded:`Exact endpoint root: x = ${lo}`,decoded:'One endpoint is already a root.'};
+ if(fh===0)return{encoded:`Exact endpoint root: x = ${hi}`,decoded:'One endpoint is already a root.'};
+ if(Math.sign(fl)===Math.sign(fh))throw Error('Bisection and false position need opposite endpoint signs. For f(x)=x²−2, try a=1 and b=2.');
+ const iters=[];let c=lo,fc=fl;
+ for(let i=0;i<200;i++){c=lo+(hi-lo)/2;fc=f(c);iters.push([i+1,c,fc]);if(Math.abs(fc)<=tol||(hi-lo)/2<=tol)break;if(Math.sign(fl)!==Math.sign(fc)){hi=c;fh=fc;}else{lo=c;fl=fc;}}
+ // Regula falsi uses the line through the endpoints, while retaining a sign-changing bracket.
+ let rlo=a,rhi=b,rfl=f(rlo),rfh=f(rhi),rc=rlo,rfc=rfl;const fpos=[];let fpConverged=false;
+ for(let i=0;i<200;i++){const den=rfh-rfl;if(Math.abs(den)<=Number.EPSILON*Math.max(1,Math.abs(rfl),Math.abs(rfh)))break;rc=(rlo*rfh-rhi*rfl)/den;rfc=f(rc);fpos.push([i+1,rc,rfc]);if(Math.abs(rfc)<=tol||Math.abs(rhi-rlo)<=tol){fpConverged=true;break;}if(Math.sign(rfl)!==Math.sign(rfc)){rhi=rc;rfh=rfc;}else{rlo=rc;rfl=rfc;}}
+ const target=(c<0?-Math.sqrt(2):Math.sqrt(2)),rTarget=(rc<0?-Math.sqrt(2):Math.sqrt(2));const points=iters.map(([,x])=>[x,0]);
+ return{encoded:`f(x) = x² − 2 on [${a}, ${b}]\nTolerance: ${tol}\n\nBISECTION\nIterations: ${iters.length}\nRoot estimate: ${c.toPrecision(16)}\nResidual: ${Math.abs(fc).toExponential(3)}\nError vs nearest root: ${Math.abs(c-target).toExponential(3)}\n\nFALSE POSITION (REGULA FALSI)\nIterations: ${fpos.length}\nRoot estimate: ${rc.toPrecision(16)}\nResidual: ${Math.abs(rfc).toExponential(3)}\nError vs nearest root: ${Math.abs(rc-rTarget).toExponential(3)}\nStatus: ${fpConverged?'converged':'stopped at iteration limit or endpoint stagnation'}\n\nLast bisection iterations:\n${iters.slice(-5).map(([i,x,y])=>`  ${i}: x=${x.toPrecision(12)}, f(x)=${y.toExponential(3)}`).join('\n')}`,
+  html:plotFunction(f,Math.min(a,0),Math.max(b,2),-1,Math.max(2,f(b)),700,250,{zero:true,points}),decoded:`Bisection halves the interval at every step, so its convergence rate is predictable. False position uses the secant line through the endpoints and may be faster, but one endpoint can remain fixed for many iterations. Both methods require a continuous function and a sign-changing bracket.`};
+}
+function demoNewton(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+ const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ const x0=get(0,1),tol=get(1,1e-10),maxIter=Math.floor(get(2,30));
+ if(!(tol>0)||!(maxIter>=1&&maxIter<=200))throw Error('Use a positive tolerance and between 1 and 200 iterations.');
+ const f=x=>x*x-2,fp=x=>2*x;let x=x0;const iters=[];let converged=false;
+ for(let i=0;i<maxIter;i++){const fx=f(x),fpx=fp(x);if(Math.abs(fx)<=tol){converged=true;break;}if(Math.abs(fpx)<=Number.EPSILON)throw Error('Derivative is too close to zero. Try a different starting value.');const dx=fx/fpx;if(!Number.isFinite(dx))throw Error('The Newton step overflowed. Try a different starting value.');x-=dx;iters.push([i+1,x,f(x)]);if(Math.abs(dx)<=tol&&Math.abs(f(x))<=Math.sqrt(tol)){converged=true;break;}}
+ const target=x<0?-Math.sqrt(2):Math.sqrt(2);return{encoded:`f(x) = x² − 2\nStart: x₀ = ${x0}\nIterations: ${iters.length}\nRoot estimate: ${x.toPrecision(16)}\nResidual |f(x)|: ${Math.abs(f(x)).toExponential(3)}\nError vs nearest root: ${Math.abs(x-target).toExponential(3)}\nStatus: ${converged?'converged':'stopped at iteration limit or did not meet both tests'}\n\n${iters.slice(-8).map(([i,v,fv])=>`  ${i}: x=${v.toPrecision(12)}, f(x)=${fv.toExponential(3)}`).join('\n')}`,
+  html:plotFunction(f,-2,3,-3,4,700,250,{zero:true,points:iters.map(([,v])=>[v,0])}),decoded:`Newton's method follows the tangent line. It can converge very quickly near the root, but it is not guaranteed to converge from every starting value.`};
+}
+function demoSecant(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+ const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ const x0=get(0,1),x1=get(1,2),tol=get(2,1e-10),maxIter=Math.floor(get(3,30));
+ if(!(tol>0)||!(maxIter>=1&&maxIter<=200))throw Error('Use a positive tolerance and between 1 and 200 iterations.');
+ const f=x=>x*x-2;let p0=x0,p1=x1,f0=f(p0),f1=f(p1);const iters=[];let converged=Math.abs(f0)<=tol||Math.abs(f1)<=tol;
+ if(converged){const root=Math.abs(f0)<=tol?p0:p1;return{encoded:`Root estimate: ${root.toPrecision(16)}\nResidual: ${Math.abs(f(root)).toExponential(3)}\nStatus: an initial value already satisfies the residual tolerance.`,decoded:'The method stopped because an initial estimate was already sufficiently close.'};}
+ for(let i=0;i<maxIter;i++){const denom=f1-f0;if(Math.abs(denom)<=Number.EPSILON*Math.max(1,Math.abs(f0),Math.abs(f1)))throw Error('The two function values are too close to form a reliable secant slope. Try different starting values.');const x2=p1-f1*(p1-p0)/denom;if(!Number.isFinite(x2))throw Error('The secant step became non-finite. Try different starting values.');p0=p1;f0=f1;p1=x2;f1=f(p1);iters.push([i+1,p1,f1]);if(Math.abs(f1)<=tol||Math.abs(p1-p0)<=tol){converged=Math.abs(f1)<=Math.sqrt(tol);if(converged)break;}}
+ const target=p1<0?-Math.sqrt(2):Math.sqrt(2);return{encoded:`f(x) = x² − 2\nStarts: x₀=${x0}, x₁=${x1}\nIterations: ${iters.length}\nRoot estimate: ${p1.toPrecision(16)}\nResidual |f(x)|: ${Math.abs(f1).toExponential(3)}\nError vs nearest root: ${Math.abs(p1-target).toExponential(3)}\nStatus: ${converged?'converged':'stopped without meeting the residual test'}`,
+  html:plotFunction(f,0,2,-2,2,700,250,{zero:true,points:iters.map(([,v])=>[v,0])}),decoded:`The secant method estimates the derivative using two recent points. It does not need a derivative, but unlike bisection it does not maintain a guaranteed root bracket.`};
+}
+function demoBrent(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+ const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ let a=get(0,1),b=get(1,2);const tol=get(2,1e-10),maxIter=200;
+ if(!(b>a))throw Error('The upper endpoint b must be greater than a.');if(!(tol>0))throw Error('Tolerance must be greater than zero.');
+ const f=x=>x*x-2;let fa=f(a),fb=f(b);
+ if(fa===0)return{encoded:`Exact endpoint root: x = ${a}`,decoded:'One endpoint is already a root.'};if(fb===0)return{encoded:`Exact endpoint root: x = ${b}`,decoded:'One endpoint is already a root.'};
+ if(Math.sign(fa)===Math.sign(fb))throw Error('Brent’s method needs a bracket with opposite endpoint signs. For f(x)=x²−2, try a=1 and b=2.');
+ let c=a,fc=fa,d=b-a,e=d,iterations=0,interpolations=0,bisections=0,converged=false;
+ for(let iter=0;iter<maxIter;iter++){
+  iterations=iter+1;
+  if(Math.sign(fb)===Math.sign(fc)){c=a;fc=fa;d=e=b-a;}
+  if(Math.abs(fc)<Math.abs(fb)){const oldB=b,oldFb=fb;a=b;fa=fb;b=c;fb=fc;c=oldB;fc=oldFb;}
+  const tol1=2*Number.EPSILON*Math.abs(b)+tol/2,xm=(c-b)/2;
+  if(Math.abs(xm)<=tol1||fb===0){converged=true;break;}
+  if(Math.abs(e)>=tol1&&Math.abs(fa)>Math.abs(fb)){
+   const s=fb/fa;let p,q;
+   if(a===c){p=2*xm*s;q=1-s;}
+   else{q=fa/fc;const r=fb/fc;p=s*(2*xm*q*(q-r)-(b-a)*(r-1));q=(q-1)*(r-1)*(s-1);}
+   if(p>0)q=-q;else p=-p;
+   if(q!==0&&2*p<Math.min(3*xm*q-Math.abs(tol1*q),Math.abs(e*q))){e=d;d=p/q;interpolations++;}
+   else{d=xm;e=xm;bisections++;}
+  }else{d=xm;e=xm;bisections++;}
+  a=b;fa=fb;b+=Math.abs(d)>tol1?d:(xm>0?tol1:-tol1);fb=f(b);
+ }
+ const target=b<0?-Math.sqrt(2):Math.sqrt(2);return{encoded:`Brent-Dekker method for f(x) = x² − 2\nBracket: [${get(0,1)}, ${get(1,2)}]\nIterations: ${iterations}\nInterpolation steps: ${interpolations}\nBisection fallbacks: ${bisections}\nRoot estimate: ${b.toPrecision(16)}\nResidual |f(x)|: ${Math.abs(fb).toExponential(3)}\nError vs nearest root: ${Math.abs(b-target).toExponential(3)}\nStatus: ${converged?'converged':'iteration limit reached'}`,
+  html:plotFunction(f,0,2,-2,2,700,250,{zero:true,points:[[b,0]]}),decoded:`This is a Brent-Dekker implementation: it tries secant or inverse-quadratic interpolation when safe and falls back to bisection when needed. The sign-changing bracket is retained.`};
+}
+function demoFixedPoint(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);
+ const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ let x=get(0,1);const tol=get(1,1e-10),maxIter=Math.floor(get(2,50));
+ if(x<=0)throw Error('Use a positive starting value for this demo of the positive root √2; x = 0 is undefined.');if(!(tol>0)||!(maxIter>=1&&maxIter<=500))throw Error('Use a positive tolerance and between 1 and 500 iterations.');
+ const g=v=>(v+2/v)/2;const iters=[];let converged=false;
+ for(let i=0;i<maxIter;i++){const xn=g(x);if(!Number.isFinite(xn))throw Error('The iteration produced a non-finite value.');iters.push([i+1,xn]);const dx=Math.abs(xn-x);x=xn;if(dx<tol){converged=true;break;}}
+ return{encoded:`Iteration: xₙ₊₁ = (xₙ + 2/xₙ) / 2\nIterations: ${iters.length}\nFinal estimate: ${x.toPrecision(16)}\n√2: ${Math.sqrt(2).toPrecision(16)}\nError: ${Math.abs(x-Math.sqrt(2)).toExponential(3)}\nStatus: ${converged?'converged':'iteration limit reached'}\n\n${iters.slice(-8).map(([i,v])=>`  ${i}: x=${v.toPrecision(12)}`).join('\n')}`,
+  html:plotFunction(g,0.5,2.5,0.5,2.5,700,250,{points:iters.map(([,v])=>[v,0])}),decoded:`This particular fixed-point iteration is algebraically Newton’s method for x² − 2 = 0. That special structure gives quadratic convergence near √2; generic fixed-point iteration is usually only linearly convergent.`};
+}
+function demoLevenberg(text){
+ const blocks=text.trim().split(/\r?\n\s*\r?\n/);const p0=(blocks[0]||'1 0.4 1').trim().split(/[\s,]+/).map(Number);const Y=(blocks[1]||'2.0 2.7 3.7 5.0 6.8').trim().split(/[\s,]+/).map(Number);
+ if(p0.length!==3||p0.some(v=>!Number.isFinite(v))||Y.length<3||Y.some(v=>!Number.isFinite(v)))throw Error('Line 1: initial a b c. Blank line. Line 2: at least three y measurements.');
+ let params=p0.slice();const X=Y.map((_,i)=>i);
+ const predict=p=>(x)=>p[0]*Math.exp(p[1]*x)+p[2];
+ const residuals=p=>Y.map((y,i)=>predict(p)(X[i])-y);
+ const cost=p=>{const r=residuals(p);return r.reduce((sum,v)=>sum+v*v,0);};
+ function solve(A,b){const M=A.map((row,i)=>[...row,b[i]]),n=b.length;for(let k=0;k<n;k++){let pivot=k;for(let i=k+1;i<n;i++)if(Math.abs(M[i][k])>Math.abs(M[pivot][k]))pivot=i;if(Math.abs(M[pivot][k])<1e-14)return null;[M[k],M[pivot]]=[M[pivot],M[k]];const z=M[k][k];for(let j=k;j<=n;j++)M[k][j]/=z;for(let i=0;i<n;i++)if(i!==k){const q=M[i][k];for(let j=k;j<=n;j++)M[i][j]-=q*M[k][j];}}return M.map(row=>row[n]);}
+ let lambda=1e-3,iterations=0,accepted=0,current=cost(params);
+ for(let it=0;it<120;it++){
+  iterations=it+1;const r=residuals(params),J=X.map(x=>{const e=Math.exp(params[1]*x);return[e,params[0]*x*e,1];});
+  const H=Array.from({length:3},()=>[0,0,0]),g=[0,0,0];
+  for(let i=0;i<Y.length;i++)for(let j=0;j<3;j++){g[j]+=J[i][j]*r[i];for(let k=0;k<3;k++)H[j][k]+=J[i][j]*J[i][k];}
+  const A=H.map((row,i)=>row.map((v,j)=>i===j?v+lambda*Math.max(H[i][i],1):v));const step=solve(A,g.map(v=>-v));if(!step)throw Error('Could not solve the damped least-squares system. Try different starting values.');
+  const trial=params.map((v,i)=>v+step[i]);const trialCost=trial.every(Number.isFinite)?cost(trial):Infinity;
+  if(trialCost<current){params=trial;const improvement=current-trialCost;current=trialCost;lambda=Math.max(lambda/3,1e-12);accepted++;if(improvement<=1e-12*Math.max(1,current)||Math.hypot(...step)<1e-9)break;}
+  else{lambda=Math.min(lambda*10,1e16);if(lambda>=1e16)break;}
+ }
+ return{encoded:`Fit model y = a exp(bx) + c, with x = 0, 1, 2, ...\nMeasurements: [${Y.join(', ')}]\n\nFitted a = ${fmtNum(params[0],8)}\nFitted b = ${fmtNum(params[1],8)}\nFitted c = ${fmtNum(params[2],8)}\nSum of squared residuals: ${current.toExponential(5)}\nAccepted steps: ${accepted} of ${iterations}\nFinal damping λ: ${lambda.toExponential(3)}\n\nResiduals: [${residuals(params).map(v=>fmtNum(v,5)).join(', ')}]`,decoded:`Levenberg-Marquardt adjusts a damped Gauss-Newton step. A trial step is accepted only if it reduces the sum of squared residuals; otherwise the damping is increased. This demo fits an exponential model to y-values sampled at integer x positions.`};
+}
+function demoLinearSpline(text){
+ const blocks=text.trim().split(/\r?\n\s*\r?\n/);const rows=(blocks[0]||'').split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>line.split(/[\s,]+/).map(Number));
+ if(rows.length<2||rows.some(r=>r.length!==2||r.some(v=>!Number.isFinite(v))))throw Error('Enter at least two x y data rows, then a blank line, then query x values.');
+ const X=rows.map(r=>r[0]),Y=rows.map(r=>r[1]);for(let i=1;i<X.length;i++)if(!(X[i]>X[i-1]))throw Error('The x values must be strictly increasing with no duplicates.');
+ const queries=parseNums(blocks[1]||'1.5 2.7');const n=X.length,h=X.slice(0,-1).map((x,i)=>X[i+1]-x);const M=new Array(n).fill(0);
+ if(n>2){const m=n-2,lo=new Array(m),di=new Array(m),up=new Array(m),rhs=new Array(m);for(let j=0;j<m;j++){const i=j+1;lo[j]=j===0?0:h[i-1];di[j]=2*(h[i-1]+h[i]);up[j]=j===m-1?0:h[i];rhs[j]=6*((Y[i+1]-Y[i])/h[i]-(Y[i]-Y[i-1])/h[i-1]);}for(let i=1;i<m;i++){const f=lo[i]/di[i-1];di[i]-=f*up[i-1];rhs[i]-=f*rhs[i-1];}const z=new Array(m);z[m-1]=rhs[m-1]/di[m-1];for(let i=m-2;i>=0;i--)z[i]=(rhs[i]-up[i]*z[i+1])/di[i];for(let i=0;i<m;i++)M[i+1]=z[i];}
+ function locate(x){for(let i=0;i<n-1;i++)if(x>=X[i]&&x<=X[i+1])return i;return -1;}
+ function linear(x){const i=locate(x);if(i<0)return null;const t=(x-X[i])/h[i];return Y[i]+t*(Y[i+1]-Y[i]);}
+ function spline(x){const i=locate(x);if(i<0)return null;const hi=h[i],left=X[i+1]-x,right=x-X[i];return M[i]*left**3/(6*hi)+M[i+1]*right**3/(6*hi)+(Y[i]-M[i]*hi*hi/6)*left/hi+(Y[i+1]-M[i+1]*hi*hi/6)*right/hi;}
+ const results=queries.map(x=>{const l=linear(x),c=spline(x);return`x=${x}: linear=${l===null?'outside data range':fmtNum(l,8)}, natural cubic=${c===null?'outside data range':fmtNum(c,8)}`;});
+ const xs=Array.from({length:220},(_,i)=>X[0]+(X[n-1]-X[0])*i/219);const ysL=xs.map(linear),ysS=xs.map(spline);
+ return{encoded:`Data points: ${n}\nNatural boundary conditions: S''(x₀) = S''(xₙ) = 0\n\n${results.join('\n')}`,
+  html:plotSeries([{x:xs,y:ysL},{x:xs,y:ysS},{x:X,y:Y}],700,250,{}),decoded:`Linear interpolation joins neighboring data points with straight segments. A natural cubic spline passes through every point and has continuous first and second derivatives. Queries outside the supplied range are deliberately not extrapolated.`};
+}
+function demoChebyshev(text){
+ const n=Math.min(Math.max(parseInt(text.trim())||4,2),20);
+ const nodes=[];
+ for(let k=0;k<n;k++)nodes.push(Math.cos(Math.PI*(k+0.5)/n));
+ function T(k,x){
+  if(k===0)return 1;
+  if(k===1)return x;
+  let t0=1,t1=x;
+  for(let j=2;j<=k;j++){const t2=2*x*t1-t0;t0=t1;t1=t2}
+  return t1;
+ }
+ // Approximate e^x on [-1, 1] using n+1 Chebyshev nodes
+ const approxNodes=[];
+ for(let k=0;k<=n;k++)approxNodes.push(Math.cos(Math.PI*(k+0.5)/(n+1)));
+ const coeffs=[];
+ for(let j=0;j<=n;j++){
+  let s=0;
+  for(const x of approxNodes)s+=Math.exp(x)*T(j,x);
+  coeffs.push((j===0?1:2)/(n+1)*s);
+ }
+ function approx(x){
+  let s=0;
+  for(let j=0;j<=n;j++)s+=coeffs[j]*T(j,x);
+  return s;
+ }
+ const xs=Array.from({length:200},(_,i)=>-1+2*i/199);
+ const exact=xs.map(x=>Math.exp(x));
+ const approxVals=xs.map(approx);
+ const maxErr=Math.max(...xs.map((x,i)=>Math.abs(approxVals[i]-exact[i])));
+ return{
+  encoded:`Degree: ${n}\nApproximation of e^x on [-1, 1] with ${n+1} Chebyshev nodes\nMax error: ${fmtNum(maxErr,8)}`,
+  html:plotSeries([{x:xs,y:exact},{x:xs,y:approxVals}],700,250,{}),
+  decoded:`Chebyshev nodes cluster near the endpoints and avoid Runge's phenomenon. The approximation converges exponentially for smooth functions.`
+ };
+}
+function demoFiniteDifferences(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ const x=get(0,1),h=get(1,1e-5);if(!(h>0))throw Error('Step size h must be positive.');
+ const fpTrue=Math.cos(x),results=[];
+ for(const hh of [h,h/10,h/100]){const fwd=(Math.sin(x+hh)-Math.sin(x))/hh;const ctr=(Math.sin(x+hh)-Math.sin(x-hh))/(2*hh);const complexStep=Math.cos(x)*(Math.sinh(hh)/hh);results.push({h:hh,fwd,ctr,cplx:complexStep});}
+ const linesOut=results.map(r=>`  h=${r.h.toExponential(2)}: forward error=${Math.abs(r.fwd-fpTrue).toExponential(3)}, central error=${Math.abs(r.ctr-fpTrue).toExponential(3)}, complex-step error=${Math.abs(r.cplx-fpTrue).toExponential(3)}`);
+ return{encoded:`f(x) = sin(x), x = ${x}\nTrue derivative cos(x): ${fpTrue.toPrecision(16)}\n\n${linesOut.join('\n')}\n\nThe complex-step value here uses the identity Im(sin(x + i h))/h = cos(x) sinh(h)/h.`,decoded:`JavaScript does not provide built-in complex numbers, so this demo evaluates the analytic identity for sin rather than a general complex-valued function. The method avoids subtracting two close real values, but it only applies directly when the function implementation supports complex inputs or has a suitable analytic expression.`};
+}
+function demoRichardson(text){
+ const hs=parseNums(text);if(hs.some(h=>h<=0))throw Error('Every step size must be greater than zero.');if(hs.length>20)throw Error('Enter no more than 20 step sizes.');
+ const x=1,fpTrue=Math.cos(x),rows=[];
+ for(const h of hs){const D1=(Math.sin(x+h)-Math.sin(x-h))/(2*h),D2=(Math.sin(x+h/2)-Math.sin(x-h/2))/h,R=(4*D2-D1)/3;rows.push(`h=${h.toExponential(3)}: D(h) error=${Math.abs(D1-fpTrue).toExponential(3)}, D(h/2) error=${Math.abs(D2-fpTrue).toExponential(3)}, Richardson error=${Math.abs(R-fpTrue).toExponential(3)}`);}
+ return{encoded:`f(x) = sin(x), x = 1, exact derivative = cos(1)\n\n${rows.join('\n')}`,decoded:`Central differences have an error expansion whose leading truncation term is proportional to h². The combination (4D(h/2) − D(h))/3 cancels that leading term, although rounding error can dominate when h becomes too small.`};
+}
+function demoQuadrature(text){
+ const lines=text.trim().split(/[\s,]+/).filter(Boolean).map(Number);if(lines.length<3||lines.slice(0,3).some(v=>!Number.isFinite(v)))throw Error('Enter a b n, for example: 0 1 10.');
+ const [a,b,n]=lines;if(!(b>a))throw Error('b must be greater than a.');if(!Number.isInteger(n)||n<1||n>5000)throw Error('n must be an integer from 1 to 5000.');
+ const f=x=>x*x,h=(b-a)/n;let trap=0.5*(f(a)+f(b));for(let i=1;i<n;i++)trap+=f(a+i*h);trap*=h;
+ let simp=null;if(n%2===0){simp=f(a)+f(b);for(let i=1;i<n;i++)simp+=(i%2===0?2:4)*f(a+i*h);simp*=h/3;}
+ const exact=(b*b*b-a*a*a)/3;const ys=Array.from({length:200},(_,i)=>f(a+(b-a)*i/199));const ymin=Math.min(...ys),ymax=Math.max(...ys);const pad=(ymax-ymin||1)*0.08;
+ return{encoded:`Integral of x² from ${a} to ${b}, n=${n}\nExact value: ${fmtNum(exact,12)}\n\nTrapezoid: ${fmtNum(trap,12)} (absolute error ${Math.abs(trap-exact).toExponential(3)})\n${simp===null?'Simpson: not computed because Simpson’s 1/3 rule requires an even number of intervals.':`Simpson: ${fmtNum(simp,12)} (absolute error ${Math.abs(simp-exact).toExponential(3)})`}`,
+  html:plotFunction(f,a,b,ymin-pad,ymax+pad,700,250,{}),decoded:`The trapezoid rule has second-order global error for smooth functions. Simpson’s 1/3 rule has fourth-order global error when the number of subintervals is even and the function is sufficiently smooth.`};
+}
+function demoGaussQuad(text){
+ const raw=text.trim()===''?5:Number(text.trim());if(!Number.isInteger(raw)||raw<2||raw>10)throw Error('Choose an integer number of Gauss-Legendre points from 2 to 10.');const n=raw;
+ const nodes=new Array(n),weights=new Array(n),m=Math.ceil(n/2);
+ function legendre(k,x){let p0=1,p1=x;if(k===0)return[1,0];for(let j=2;j<=k;j++){const p=((2*j-1)*x*p1-(j-1)*p0)/j;p0=p1;p1=p;}const derivative=k*(x*p1-p0)/(x*x-1);return[p1,derivative];}
+ for(let i=0;i<m;i++){let z=Math.cos(Math.PI*(i+0.75)/(n+0.5)),pp=0;for(let it=0;it<100;it++){const [pn,dp]=legendre(n,z);pp=dp;const dz=pn/dp;z-=dz;if(Math.abs(dz)<2e-15)break;}const w=2/((1-z*z)*pp*pp);nodes[i]=-z;nodes[n-1-i]=z;weights[i]=w;weights[n-1-i]=w;}
+ const a=0,b=Math.PI;let integral=0;for(let i=0;i<n;i++){const x=(a+b)/2+(b-a)/2*nodes[i];integral+=(b-a)/2*weights[i]*Math.sin(x);}
+ return{encoded:`Gauss-Legendre points: ${n}\nIntegral of sin(x) on [0, π]: ${fmtNum(integral,14)}\nExact value: 2\nAbsolute error: ${Math.abs(integral-2).toExponential(3)}\n\nAn n-point Gauss-Legendre rule integrates any polynomial of degree ≤ ${2*n-1} exactly in exact arithmetic.`,decoded:`The nodes are roots of the Legendre polynomial and the weights are chosen to maximize polynomial exactness. For smooth functions, high accuracy is often possible with relatively few function evaluations.`};
+}
+function demoHorner(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);if(!lines.length)throw Error('Line 1: polynomial coefficients, highest degree first. Line 2: x value.');
+ const coeffs=lines[0].split(/[\s,]+/).map(Number);if(coeffs.length<1||coeffs.some(v=>!Number.isFinite(v)))throw Error('Coefficients must be finite numbers.');const x=lines.length>1?Number(lines[1]):1;if(!Number.isFinite(x))throw Error('x must be a finite number.');
+ function horner(c,x){let p=c[0];for(let i=1;i<c.length;i++)p=p*x+c[i];return p;}
+ function hornerDeriv(c,x){let p=c[0],dp=0;for(let i=1;i<c.length;i++){dp=dp*x+p;p=p*x+c[i];}return{p,dp};}
+ const{p,dp}=hornerDeriv(coeffs,x),xs=Array.from({length:200},(_,i)=>-2+4*i/199),ys=xs.map(v=>horner(coeffs,v));
+ return{encoded:`Coefficients (highest degree first): [${coeffs.join(', ')}]\nx = ${x}\np(x) = ${fmtNum(p,12)}\np′(x) = ${fmtNum(dp,12)}\n\nHorner’s scheme uses ${Math.max(0,coeffs.length-1)} multiply-add stages.`,html:plotSeries([{x:xs,y:ys}],700,250,{}),decoded:`Horner’s scheme evaluates a degree-n polynomial in O(n) operations and is generally more stable than evaluating each power separately.`};
+}
+function demoCordic(text){
+ const lines=text.split(/\r?\n/).map(v=>v.trim()).filter(Boolean);const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ const deg=get(0,45),iters=Math.floor(get(1,20));if(!(iters>=1&&iters<=40))throw Error('Choose 1 to 40 iterations.');
+ const original=deg*Math.PI/180;let z=((original+Math.PI)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI,sign=1;if(z>Math.PI/2){z-=Math.PI;sign=-1;}else if(z< -Math.PI/2){z+=Math.PI;sign=-1;}
+ let K=1;for(let i=0;i<iters;i++)K*=Math.sqrt(1+Math.pow(2,-2*i));const angles=[];for(let i=0;i<iters;i++)angles.push(Math.atan(2**(-i)));
+ let x=1,y=0,theta=0;for(let i=0;i<iters;i++){const d=z>=theta?1:-1;const xn=x-d*y*2**(-i);const yn=y+d*x*2**(-i);x=xn;y=yn;theta+=d*angles[i];}
+ const cos=sign*x/K,sin=sign*y/K;return{encoded:`Angle: ${deg}°\nIterations: ${iters}\n\nCORDIC cos: ${fmtNum(cos,12)}  | Math.cos: ${fmtNum(Math.cos(original),12)}\nCORDIC sin: ${fmtNum(sin,12)}  | Math.sin: ${fmtNum(Math.sin(original),12)}\n\nAbsolute errors: cos ${Math.abs(cos-Math.cos(original)).toExponential(3)}, sin ${Math.abs(sin-Math.sin(original)).toExponential(3)}`,decoded:`CORDIC uses repeated rotations by fixed angles that can be implemented with shifts and additions. This demo first reduces the angle to the algorithm’s convergence range, then corrects the sign for the original quadrant.`};
+}
+function demoLanczos(text){
+ const values=parseNums(text);
+ const G=7;
+ const COEFFS=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61502916214059,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+ function gamma(z){
+  if(z<=0&&Number.isInteger(z))throw Error(`Gamma has a pole at z = ${z}.`);
+  if(z<0.5)return Math.PI/(Math.sin(Math.PI*z)*gamma(1-z));
+  z-=1;
+  let x=COEFFS[0];
+  for(let i=1;i<G+2;i++)x+=COEFFS[i]/(z+i);
+  const t=z+G+0.5;
+  return Math.sqrt(2*Math.PI)*Math.pow(t,z+0.5)*Math.exp(-t)*x;
+ }
+ const rows=values.map(z=>`  Gamma(${z}) = ${fmtNum(gamma(z),10)}`);
+ return{
+  encoded:`Lanczos approximation (g=7, n=9)\n\n${rows.join('\n')}\n\nGamma(0.5) should be sqrt(pi) = ${fmtNum(Math.sqrt(Math.PI),10)}`,
+  decoded:`The Lanczos approximation computes Gamma(z) using a finite series of coefficients. For z < 0.5, use the reflection formula.`
+ };
+}
+function demoEulerMidpoint(text){
+ const blocks=text.trim().split(/\r?\n\s*\r?\n/);const vals=(blocks[0]||'0 1 2').trim().split(/[\s,]+/).map(Number);if(vals.length<3||vals.slice(0,3).some(v=>!Number.isFinite(v)))throw Error('First line: t0 y0 t1. Blank line. Next line: step size h.');
+ const [t0,y0,t1]=vals,h0=Number((blocks[1]||'0.1').trim());if(!(t1>t0)||!(h0>0)||!Number.isFinite(h0))throw Error('Require t1 > t0 and a positive step size.');if((t1-t0)/h0>50000)throw Error('Requested step size would create more than 50,000 steps. Increase h.');const n=Math.max(1,Math.round((t1-t0)/h0)),h=(t1-t0)/n;
+ const f=(t,y)=>-y;let ye=y0,ym=y0;const ts=[t0],ey=[ye],my=[ym],exact=[y0];
+ for(let i=0;i<n;i++){const t=ts[i];ye+=h*f(t,ye);const k1=h*f(t,ym),k2=h*f(t+h/2,ym+k1/2);ym+=k2;ts.push(t0+(i+1)*h);ey.push(ye);my.push(ym);exact.push(y0*Math.exp(-(ts[i+1]-t0)));}
+ const trueEnd=y0*Math.exp(-(t1-t0));return{encoded:`ODE: dy/dt = −y\nInitial value: y(${t0}) = ${y0}\nFinal time: ${t1}\nRequested h: ${h0}; actual h: ${h}\nSteps: ${n}\n\nEuler:    ${fmtNum(ye,12)} (error ${Math.abs(ye-trueEnd).toExponential(3)})\nMidpoint: ${fmtNum(ym,12)} (error ${Math.abs(ym-trueEnd).toExponential(3)})\nExact:    ${fmtNum(trueEnd,12)}`,
+  html:plotSeries([{x:ts,y:exact},{x:ts,y:ey},{x:ts,y:my}],700,250,{}),decoded:`Euler has first-order global error. The midpoint Runge-Kutta method has second-order global error. The exact solution is y(t) = y₀ exp(−(t − t₀)); the lab now uses your initial value and requested time interval.`};
+}
+function demoRk4(text){
+ const blocks=text.trim().split(/\r?\n\s*\r?\n/);const vals=(blocks[0]||'0 1 2').trim().split(/[\s,]+/).map(Number);if(vals.length<3||vals.slice(0,3).some(v=>!Number.isFinite(v)))throw Error('First line: t0 y0 t1. Blank line. Next line: step size h.');
+ const [t0,y0,t1]=vals,h0=Number((blocks[1]||'0.1').trim());if(!(t1>t0)||!(h0>0)||!Number.isFinite(h0))throw Error('Require t1 > t0 and a positive step size.');if((t1-t0)/h0>50000)throw Error('Requested step size would create more than 50,000 steps. Increase h.');const n=Math.max(1,Math.round((t1-t0)/h0)),h=(t1-t0)/n;const f=(t,y)=>-y;
+ let y=y0;const ts=[t0],ys=[y],exact=[y0];for(let i=0;i<n;i++){const t=ts[i],k1=h*f(t,y),k2=h*f(t+h/2,y+k1/2),k3=h*f(t+h/2,y+k2/2),k4=h*f(t+h,y+k3);y+=(k1+2*k2+2*k3+k4)/6;ts.push(t0+(i+1)*h);ys.push(y);exact.push(y0*Math.exp(-(ts[i+1]-t0)));}
+ const trueEnd=y0*Math.exp(-(t1-t0));return{encoded:`ODE: dy/dt = −y\nInitial value: y(${t0}) = ${y0}\nFinal time: ${t1}\nRequested h: ${h0}; actual h: ${h}\nSteps: ${n}\n\nRK4:   ${fmtNum(y,14)}\nExact: ${fmtNum(trueEnd,14)}\nAbsolute error: ${Math.abs(y-trueEnd).toExponential(3)}`,
+  html:plotSeries([{x:ts,y:exact},{x:ts,y:ys}],700,250,{}),decoded:`Classical RK4 uses four slope evaluations per step and has fourth-order global accuracy for sufficiently smooth solutions. The final step is adjusted so the calculation reaches t1 exactly.`};
+}
+function demoSymplectic(text){
+ const blocks=text.trim().split(/\r?\n\s*\r?\n/);const vals=(blocks[0]||'0 1 10').trim().split(/[\s,]+/).map(Number);if(vals.length<3||vals.slice(0,3).some(v=>!Number.isFinite(v)))throw Error('Enter t0 q0 T on the first line, then a blank line and step size h.');
+ const t0=vals[0],q0=vals[1],tEnd=vals[2],h0=Number((blocks[1]||'0.05').trim());if(!(tEnd>t0)||!(h0>0)||!Number.isFinite(h0))throw Error('Require T > t0 and a positive step size.');const n=Math.max(1,Math.round((tEnd-t0)/h0));if(n>100000)throw Error('This teaching demo is limited to 100,000 steps.');const h=(tEnd-t0)/n;
+ // Harmonic oscillator: q' = p, p' = -q. The second initial value is q0; p0 is zero.
+ let q=q0,p=0;const ts=[t0],qs=[q],ps=[p],exact=[q];
+ for(let i=0;i<n;i++){p=p-h*q;q=q+h*p;ts.push(t0+(i+1)*h);qs.push(q);ps.push(p);exact.push(q0*Math.cos((i+1)*h));}
+ const energy=qs.map((qq,i)=>0.5*(qq*qq+ps[i]*ps[i]));return{encoded:`Harmonic oscillator, symplectic Euler\nq(t₀)=${q0}, p(t₀)=0, t₀=${t0}, T=${tEnd}\nRequested h=${h0}; actual h=${h}; steps=${n}\n\nFinal q: ${fmtNum(q,10)}\nExact q(T): ${fmtNum(q0*Math.cos(tEnd-t0),10)}\nEnergy range: [${fmtNum(Math.min(...energy),8)}, ${fmtNum(Math.max(...energy),8)}]\nInitial energy: ${fmtNum(0.5*q0*q0,8)}`,
+  html:plotSeries([{x:ts,y:exact},{x:ts,y:qs}],700,250,{}),decoded:`Symplectic Euler uses the updated momentum when advancing position. For a Hamiltonian oscillator its energy is not exactly constant, but the numerical energy usually oscillates within a bounded range rather than drifting steadily. This is a teaching example, not a universal stability guarantee.`};
+}
+function demoPoisson1d(text){
+ const blocks=text.split(/\n\s*\n/);
+ const lines=blocks[0].split(/\s+/).map(Number);
+ const n=Math.min(Math.max(parseInt(lines[0])||10,3),100);
+ const h=1/(n+1);
+ // Solve -u'' = 1, u(0) = u(1) = 0
+ // Tridiagonal Thomas algorithm
+ const a=new Array(n).fill(-1);
+ const b=new Array(n).fill(2);
+ const c=new Array(n).fill(-1);
+ const d=new Array(n).fill(h*h);
+ for(let i=1;i<n;i++){
+  const m=a[i]/b[i-1];
+  b[i]=b[i]-m*c[i-1];
+  d[i]=d[i]-m*d[i-1];
+ }
+ const u=new Array(n).fill(0);
+ u[n-1]=d[n-1]/b[n-1];
+ for(let i=n-2;i>=0;i--)u[i]=(d[i]-c[i]*u[i+1])/b[i];
+ const xs=u.map((_,i)=>(i+1)*h);
+ const exact=xs.map(x=>x*(1-x)/2);
+ const maxErr=Math.max(...u.map((v,i)=>Math.abs(v-exact[i])));
+ return{
+  encoded:`1D Poisson: -u'' = 1, u(0)=u(1)=0\nGrid points: ${n}, h = ${fmtNum(h)}\n\nMax error vs exact: ${maxErr.toExponential(3)}\nMidpoint u = ${fmtNum(u[Math.floor(n/2)])}, exact = ${fmtNum(exact[Math.floor(n/2)])}`,
+  html:plotSeries([{x:xs,y:exact},{x:xs,y:u}],700,250,{}),
+  decoded:`The finite-difference method reduces the ODE to a tridiagonal system. Thomas algorithm solves it in O(n) time.`
+ };
+}
+function demoHeat1d(text){
+ const lines=text.split(/\n/).map(l=>l.trim()).filter(Boolean);
+ const n=Math.min(Math.max(parseInt(lines[0])||20,5),50);
+ const steps=Math.min(Math.max(parseInt(lines[1])||100,10),1000);
+ const T=parseFloat(lines[2])||0.5;
+ const h=1/(n+1);
+ const dt=T/steps;
+ const r=dt/(2*h*h);
+ // Tridiagonal CN matrices: A = I - r L, B = I + r L
+ const A=Array.from({length:n},()=>new Array(n).fill(0));
+ const B=Array.from({length:n},()=>new Array(n).fill(0));
+ for(let i=0;i<n;i++){
+  A[i][i]=1+2*r;
+  if(i>0)A[i][i-1]=-r;
+  if(i<n-1)A[i][i+1]=-r;
+  B[i][i]=1-2*r;
+  if(i>0)B[i][i-1]=r;
+  if(i<n-1)B[i][i+1]=r;
+ }
+ // LU factorization of A (Thomas)
+ const aa=new Array(n).fill(0);
+ const bb=new Array(n).fill(0);
+ for(let i=0;i<n;i++){
+  aa[i]=i>0?A[i][i-1]:0;
+  bb[i]=A[i][i];
+  if(i>0){const m=aa[i]/(bb[i-1]);bb[i]-=m*A[i-1][i];aa[i]=m}
+ }
+ function solveA(b){
+  const y=b.slice();
+  for(let i=1;i<n;i++)y[i]-=aa[i]*y[i-1];
+  const x=new Array(n).fill(0);
+  x[n-1]=y[n-1]/bb[n-1];
+  for(let i=n-2;i>=0;i--)x[i]=(y[i]-A[i][i+1]*x[i+1])/bb[i];
+  return x;
+ }
+ let u=Array.from({length:n},(_,i)=>Math.sin(Math.PI*(i+1)*h));
+ for(let s=0;s<steps;s++){
+  const rhs=new Array(n).fill(0);
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++)rhs[i]+=B[i][j]*u[j];
+  u=solveA(rhs);
+ }
+ const xs=u.map((_,i)=>(i+1)*h);
+ const exact=xs.map(x=>Math.exp(-Math.PI*Math.PI*T)*Math.sin(Math.PI*x));
+ const maxErr=Math.max(...u.map((v,i)=>Math.abs(v-exact[i])));
+ return{
+  encoded:`1D heat equation, Crank-Nicolson\nGrid points: ${n}, steps: ${steps}, T=${T}\n\nMax error vs exact: ${maxErr.toExponential(3)}\nMidpoint u=${fmtNum(u[Math.floor(n/2)])}, exact=${fmtNum(exact[Math.floor(n/2)])}`,
+  html:plotSeries([{x:xs,y:exact},{x:xs,y:u}],700,250,{}),
+  decoded:`Crank-Nicolson is second-order in time and unconditionally stable. It solves a tridiagonal system at each step.`
+ };
+}
+function demoFft(text){
+ const values=parseNums(text);
+ if(!values.length||(values.length&(values.length-1))!==0)throw Error('Enter a power-of-two number of values.');
+ if(values.length>1024)throw Error('This direct-DFT comparison is limited to 1,024 values to keep the browser responsive.');
+ const N=values.length;
+ // Naive DFT for comparison
+ function dft(x){
+  const X=[];
+  for(let k=0;k<x.length;k++){
+   let re=0,im=0;
+   for(let n=0;n<x.length;n++){
+    const theta=-2*Math.PI*k*n/x.length;
+    re+=x[n]*Math.cos(theta);
+    im+=x[n]*Math.sin(theta);
+   }
+   X.push({re,im});
+  }
+  return X;
+ }
+ function fft(x){
+  const N=x.length;
+  if(N===1)return[{re:x[0],im:0}];
+  const even=fft(x.filter((_,i)=>i%2===0));
+  const odd=fft(x.filter((_,i)=>i%2===1));
+  const X=new Array(N);
+  for(let k=0;k<N/2;k++){
+   const t={re:Math.cos(-2*Math.PI*k/N)*odd[k].re-Math.sin(-2*Math.PI*k/N)*odd[k].im,
+            im:Math.sin(-2*Math.PI*k/N)*odd[k].re+Math.cos(-2*Math.PI*k/N)*odd[k].im};
+   X[k]={re:even[k].re+t.re,im:even[k].im+t.im};
+   X[k+N/2]={re:even[k].re-t.re,im:even[k].im-t.im};
+  }
+  return X;
+ }
+ const X=fft(values);
+ const Y=dft(values);
+ const mags=X.map(v=>Math.sqrt(v.re*v.re+v.im*v.im));
+ const xs=values.map((_,i)=>i);
+ return{
+  encoded:`Input: [${values.join(', ')}]\n\nFFT magnitudes:\n${mags.map((m,i)=>`  bin ${i}: ${fmtNum(m,6)}`).join('\n')}\n\nMax difference from naive DFT: ${Math.max(...X.map((v,i)=>Math.abs(v.re-Y[i].re)+Math.abs(v.im-Y[i].im))).toExponential(3)}`,
+  html:plotSeries([{x:xs,y:values},{x:xs,y:mags}],700,250,{}),
+  decoded:`FFT in O(n log n). The plot shows the input (blue) and the magnitude spectrum (orange).`
+ };
+}
+function demoAutodiffMixed(text){
+ const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+ const get=(i,d)=>{if(i>=lines.length)return d;const v=Number(lines[i]);if(!Number.isFinite(v))throw Error('Enter finite numeric values.');return v;};
+ const x=get(0,2),a=get(1,1),b=get(2,1);
+ // f(x, a, b) = a * x^2 + b * x
+ const f=x=>a*x*x+b*x;
+ const fp=x=>2*a*x+b;
+ // dual number autodiff
+ function dual(v,dv){return{v,dv}}
+ function dadd(x,y){return dual(x.v+y.v,x.dv+y.dv)}
+ function dmul(x,y){return dual(x.v*y.v,x.v*y.dv+x.dv*y.v)}
+ const X=dual(x,1);
+ const A=dual(a,0);
+ const B=dual(b,0);
+ const term1=dmul(A,dmul(X,X));
+ const term2=dmul(B,X);
+ const result=dadd(term1,term2);
+ return{
+  encoded:`f(x) = a x^2 + b x with a=${a}, b=${b}\n\nf(${x}) = ${result.v}\nf'(${x}) = ${result.dv}\n\nAnalytic: ${fp(x)}\nDifference: ${Math.abs(result.dv-fp(x)).toExponential(3)}\n\nForward-mode autodiff propagates the derivative alongside the value.`,
+  decoded:`Dual numbers carry (value, derivative). Each operation updates both. Reverse mode (backprop) is more efficient when there are many inputs.`
+ };
+}
+
+/* ============================================================
+   Lab dispatcher
+   ============================================================ */
+function runLab(l,initial){
+ const input=$('#labInput').value;
+ let res;
+ try{
+  if(!initial){$('#labEncoded').textContent='Running…';$('#labDecoded').textContent=''}
+  switch(l.demo){
+   case'ieee754':res=demoIeee754(input);break;
+   case'cancellation':res=demoCancellation(input);break;
+   case'error-propagation':res=demoErrorPropagation(input);break;
+   case'kahan':res=demoKahan(input);break;
+   case'pairwise':res=demoPairwise(input);break;
+   case'interval':res=demoInterval(input);break;
+   case'bisection':res=demoBisection(input);break;
+   case'newton':res=demoNewton(input);break;
+   case'secant':res=demoSecant(input);break;
+   case'brent':res=demoBrent(input);break;
+   case'fixed-point':res=demoFixedPoint(input);break;
+   case'levenberg':res=demoLevenberg(input);break;
+   case'linear-spline':res=demoLinearSpline(input);break;
+   case'chebyshev':res=demoChebyshev(input);break;
+   case'finite-differences':res=demoFiniteDifferences(input);break;
+   case'richardson':res=demoRichardson(input);break;
+   case'quadrature':res=demoQuadrature(input);break;
+   case'gauss-quad':res=demoGaussQuad(input);break;
+   case'horner':res=demoHorner(input);break;
+   case'cordic':res=demoCordic(input);break;
+   case'lanczos':res=demoLanczos(input);break;
+   case'euler-midpoint':res=demoEulerMidpoint(input);break;
+   case'rk4':res=demoRk4(input);break;
+   case'symplectic':res=demoSymplectic(input);break;
+   case'poisson1d':res=demoPoisson1d(input);break;
+   case'heat1d':res=demoHeat1d(input);break;
+   case'fft':res=demoFft(input);break;
+   case'autodiff-mixed':res=demoAutodiffMixed(input);break;
+   default:throw Error('No interactive implementation is available for this lesson.');
+  }
+ }catch(e){
+  res={encoded:'Input or runtime error',decoded:e.message};
+ }
+ const el=$('#labEncoded');
+ if(res.html){el.innerHTML=res.html+'\n\n'+res.encoded}else{el.textContent=res.encoded}
+ $('#labDecoded').textContent=res.decoded;
+ if(!initial)toast('Lab complete');
+}
+
+/* ============================================================
+   State and shell
+   ============================================================ */
+const state={page:'home',current:null,completed:new Set(),bookmarks:new Set(),theme:'system',drafts:{}};
+function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1900)}
+function save(){try{localStorage.setItem('az-numerical-lab-v1',JSON.stringify({schemaVersion:1,completed:[...state.completed],bookmarks:[...state.bookmarks],theme:state.theme,current:state.current,drafts:state.drafts}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('az-numerical-lab-v1')||'null');if(!d||d.schemaVersion!==1)return;
+ state.completed=new Set((d.completed||[]).filter(id=>byId[id]));
+ state.bookmarks=new Set((d.bookmarks||[]).filter(id=>byId[id]));
+ state.theme=['system','light','dark'].includes(d.theme)?d.theme:'system';
+ state.current=byId[d.current]?d.current:null;
+ state.drafts=d.drafts&&typeof d.drafts==='object'?d.drafts:{};}catch(e){}}
+function applyTheme(){let t=state.theme;if(t==='system')t=matchMedia('(prefers-color-scheme: light)').matches?'light':'dark';document.documentElement.dataset.theme=t;$('#themeSelect').value=state.theme}
+function getChapter(id){return CHAPTERS.find(c=>c.ids.includes(id))||CHAPTERS[0]}
+function progress(){
+ const n=state.completed.size,t=LESSONS.length;
+ $('#progressText').textContent=`${n} / ${t}`;
+ $('#progressFill').style.width=(n/t*100)+'%';
+ $('#lessonCount').textContent=t+' lessons';
+ $('#catalogCount').textContent=`${CHAPTERS.length} chapters · ${t} lessons · ${LESSONS.filter(l=>l.demo&&l.demo!=='none').length} labs`;
+ $('#progressBar').setAttribute('aria-valuenow',String(Math.round(n/t*100)));
+}
+function renderTree(){
+ const q=$('#searchInput').value.toLowerCase().trim(),ch=$('#chapterFilter').value;
+ const root=$('#courseTree');root.textContent='';
+ for(const c of CHAPTERS){
+  if(ch!=='all'&&c.id!==ch)continue;
+  const rows=c.ids.map(id=>byId[id]).filter(x=>x&&(!q||(x.title+' '+x.summary+' '+x.kind+' '+c.title).toLowerCase().includes(q)));
+  if(!rows.length)continue;
+  const group=document.createElement('section');
+  const label=document.createElement('div');label.className='group-label';
+  label.innerHTML=`<span>${esc(c.title)}</span><span>${rows.length}</span>`;
+  group.append(label);
+  rows.forEach(l=>{
+   const b=document.createElement('button');b.type='button';
+   b.className='link'+(state.current===l.id?' active':'');
+   b.dataset.lesson=l.id;
+   b.innerHTML=`<span class="num">${String(LESSONS.indexOf(l)+1).padStart(2,'0')}</span><span class="name">${esc(l.title)}</span>${state.completed.has(l.id)?'<span class="done" aria-label="completed">✓</span>':''}`;
+   group.append(b);
+  });
+  root.append(group);
+ }
+ if(!root.children.length)root.innerHTML='<p class="muted">No matching lessons. Try another search.</p>';
+ progress();
+}
+function listToHTML(a){return `<ol class="steps">${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`}
+function refsHTML(r){return r&&r.length?`<div class="references">${r.map(x=>`<a target="_blank" rel="noopener noreferrer" href="${esc(x[1])}">${esc(x[0])} ↗</a>`).join('')}</div>`:'<p class="muted">See the recommended textbooks and papers for a full treatment.</p>'}
+function codeRecord(l){if(l.codeKey==='none')return null;return CODE[l.codeKey]||CODE[l.demo]||null}
+function codeText(l){
+ const c=codeRecord(l);
+ if(c&&c.python)return c.python;
+ return '# CONCEPT OUTLINE, NOT EXECUTABLE PYTHON\n# Lesson: '+l.title+'\n\n# Core idea\n# '+String(l.summary||'').replace(/\n/g,'\n# ')+'\n\n# Pseudocode from the lesson\n'+String(l.pseudo||'').split('\n').map(x=>'# '+x).join('\n')+'\n';
+}
+function statusClass(l){return /Runnable/.test(l.status)?'good':'warn'}
+
+function renderLesson(id){
+ const l=byId[id];if(!l){renderHome();return}
+ state.page='lesson';state.current=id;
+ const c=getChapter(id);const index=LESSONS.indexOf(l);const next=LESSONS[(index+1)%LESSONS.length];
+ const hasDemo=l.demo&&l.demo!=='none';
+ const demoArea=hasDemo?`<section class="panel"><div class="panel-head"><h2>${esc(l.demoTitle||'Interactive teaching lab')}</h2><p>Everything runs in your browser with plain JavaScript. This is a teaching implementation, not a production numerical library.</p></div><div class="body"><div class="lab-top"><label for="labInput">Input</label><button class="btn" id="resetSample">Reset sample</button><button class="btn primary" id="runLab">Run lab</button></div><textarea class="lab-input" id="labInput" aria-label="Lab input">${esc(l.sample||'')}</textarea><div class="notice info"><strong>Format:</strong> see the sample for the expected format. Most labs take space separated numbers, one per line.</div><div class="lab-cols"><div><div class="label">Output</div><div class="lab-output" id="labEncoded">Run the lab to see output.</div></div><div><div class="label">Explanation</div><div class="lab-output" id="labDecoded">Step notes appear here.</div></div></div></div></section>`:'';
+ const references=refsHTML(l.refs);
+ const code=state.drafts[id]??codeText(l);
+ $('#mainView').innerHTML=`<div class="breadcrumb">Numerical Lab / ${esc(c.title)}</div>
+<header class="header">
+ <div class="eyebrow">LESSON ${String(index+1).padStart(2,'0')} · ${esc(l.kind)}</div>
+ <h1>${esc(l.title)}</h1>
+ <p>${esc(l.summary)}</p>
+ <div class="tags"><span class="tag">Level ${l.level}</span><span class="tag ${statusClass(l)}">${esc(l.status)}</span><span class="tag">${esc(c.title.replace(/^\d+\\.\s*/,''))}</span></div>
+ <div class="header-actions">
+  <button class="btn" id="bookmarkBtn">${state.bookmarks.has(id)?'★ Bookmarked':'☆ Bookmark'}</button>
+  <button class="btn primary" id="completeBtn">${state.completed.has(id)?'✓ Completed':'Mark complete'}</button>
+ </div>
+</header>
+<section class="panel"><div class="panel-head"><h2>1. Understand the idea</h2><p>Plain language and a mental picture</p></div><div class="body idea"><div><p>${esc(l.summary)}</p><p><strong>What problem it solves:</strong> ${esc(l.problem)}</p><div class="takeaway"><strong>Takeaway:</strong> ${esc(l.output)}</div></div><aside class="mental"><small>Mental picture</small><strong>${esc(l.mental)}</strong><p>${esc(l.mentalText)}</p></aside></div></section>
+<section class="panel"><div class="panel-head"><h2>2. Input and output</h2><p>Know what goes in and what comes out</p></div><div class="body two"><div class="mini"><h3>Input</h3><p>${esc(l.input)}</p></div><div class="mini"><h3>Output</h3><p>${esc(l.output)}</p></div></div></section>
+<section class="panel"><div class="panel-head"><h2>3. How it works</h2><p>Step by step, with the key rule that makes it correct</p></div><div class="body two"><div>${listToHTML(l.steps)}<div class="takeaway" style="margin-top:14px"><strong>Key rule:</strong> ${esc(l.invariant)}</div></div><pre class="pseudo">${esc(l.pseudo)}</pre></div><div class="table-wrap" style="margin-top:16px"><table><thead><tr><th>Step</th><th>What happens</th><th>Why it matters</th></tr></thead><tbody>${l.trace.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section>
+${demoArea}
+<section class="panel"><div class="panel-head"><h2>4. Cost and stability</h2><p>Costs and stability depend on the problem, tolerance and floating-point arithmetic. These are scope labels, not universal benchmarks.</p></div><div class="body"><div class="tiles">${l.complexity.map((x,i)=>`<div class="tile"><span>${['Time','Space','Numerics'][i]}</span><strong>${esc(x.split(' ').slice(0,2).join(' '))}</strong><small>${esc(x)}</small></div>`).join('')}</div><div class="two" style="margin-top:12px"><div class="mini"><h3>Strengths</h3><p>${esc(l.strength)}</p></div><div class="mini"><h3>Limits</h3><p>${esc(l.limits)}</p></div></div></div></section>
+<section class="panel"><div class="panel-head"><h2>5. Code and usage</h2><p>Reference code is for learning. Real numerical code should use a vetted library.</p></div><div class="code-head"><div><span class="tag">${codeRecord(l)?'Python example':'Concept outline, not executable'}</span> <span class="tag">Editable</span></div><div class="header-actions" style="margin:0"><button class="btn" id="copyCode">Copy code</button><button class="btn" id="downloadCode">Download</button></div></div><textarea id="codeEditor" class="code-editor" spellcheck="false" aria-label="Editable Python code">${esc(code)}</textarea><div class="code-foot"><span>${codeRecord(l)?'Reference example. The in-page lab runs its own JavaScript implementation.':'Lesson-specific outline, not an implementation.'}</span><span id="codeStatus">Local draft</span></div><div class="body"><div class="mini"><h3>Where it is used</h3><p>${esc(l.uses)}</p></div><div class="notice" style="margin-top:12px"><strong>Common pitfall:</strong> ${esc(l.pitfall)}</div></div></section>
+<section class="panel"><div class="panel-head"><h2>6. Choices and alternatives</h2><p>Pick based on the problem, tolerance and required robustness</p></div><div class="body two"><div class="mini"><h3>When to use this</h3><p>${esc(l.strength)}</p></div><div class="mini"><h3>When to use something else</h3><p>${esc(l.limits)}</p></div></div></section>
+<section class="panel"><div class="panel-head"><h2>7. Check yourself</h2><p>Try to answer before you open the explanation</p></div><div class="body"><details class="practice"><summary>${esc(l.question)}</summary><p>${esc(l.answer)}</p></details></div></section>
+<section class="panel"><div class="panel-head"><h2>8. References</h2><p>Standard references for this topic</p></div><div class="body">${references}<p class="muted" style="font-size:11.5px;margin-top:14px">These labs are for learning and have limited input ranges. For production work use LAPACK, BLAS, SciPy, Eigen, GSL, or another vetted numerical library.</p></div></section>
+<footer class="footer"><span>AZNUR Numerical Lab · local learning</span><span>Lesson ${index+1} of ${LESSONS.length} · Next: ${esc(next.title)}</span><button class="btn" id="nextLesson">Next →</button></footer>`;
+
+ $('#bookmarkBtn').onclick=()=>{state.bookmarks.has(id)?state.bookmarks.delete(id):state.bookmarks.add(id);save();renderLesson(id);toast(state.bookmarks.has(id)?'Bookmarked':'Bookmark removed')};
+ $('#completeBtn').onclick=()=>{state.completed.has(id)?state.completed.delete(id):state.completed.add(id);save();renderTree();renderLesson(id);toast(state.completed.has(id)?'Lesson completed':'Completion removed')};
+ $('#nextLesson').onclick=()=>openLesson(next.id);
+ $('#copyCode').onclick=async()=>{const v=$('#codeEditor').value;try{await navigator.clipboard.writeText(v);toast('Code copied')}catch{const ta=$('#codeEditor');ta.select();document.execCommand('copy');toast('Code copied')}};
+ $('#downloadCode').onclick=()=>{const r=codeRecord(l);downloadText(`${id}.${r?'py':'txt'}`,$('#codeEditor').value,r?'text/x-python':'text/plain')};
+ $('#codeEditor').addEventListener('input',()=>{state.drafts[id]=$('#codeEditor').value;save();$('#codeStatus').textContent='Draft saved locally'});
+ if(hasDemo){
+  $('#runLab').onclick=()=>runLab(l);
+  $('#resetSample').onclick=()=>{$('#labInput').value=l.sample||'';$('#labEncoded').textContent='Run the lab to see output.';$('#labDecoded').textContent='Step notes appear here.'};
+  runLab(l,true);
+ }
+ renderTree();save();
+ if(location.hash!==`#${id}`)history.replaceState(null,'',`#${id}`);
+}
+
+function renderHome(){
+ state.page='home';
+ $('#mainView').innerHTML=`<div class="home-hero"><div class="eyebrow">AZNUR · ENGINEERING TOOLBOOK</div><h1>Understand numerical algorithms from IEEE 754 to FFT and autodiff.</h1><p>A beginner friendly course covering floating-point basics, stable computation, root finding, nonlinear systems, interpolation, numerical differentiation and integration, polynomial algorithms, special functions, ODE solvers, PDE solvers, FFT and automatic differentiation. Every lesson has a plain explanation and most have a runnable lab.</p><div class="header-actions" style="margin:0"><button class="btn primary" id="startFirst">Start at foundations</button><button class="btn" id="resumeLesson">Continue lesson</button></div></div>
+<div class="stats"><div class="stat"><strong>${CHAPTERS.length}</strong><span>chapters</span></div><div class="stat"><strong>${LESSONS.length}</strong><span>lessons</span></div><div class="stat"><strong>${LESSONS.filter(l=>l.demo&&l.demo!=='none').length}</strong><span>runnable labs</span></div><div class="stat"><strong>1</strong><span>standalone HTML file</span></div></div>
+<section class="panel"><div class="panel-head"><h2>Honest scope</h2><p>One app covers the whole curriculum. Production numerical software is a separate engineering project.</p></div><div class="body two"><div class="mini"><h3>What runs here</h3><p>IEEE 754 inspection, cancellation demo, error propagation, Kahan and Neumaier summation, pairwise summation, interval arithmetic, bisection, Newton, secant, Brent-Dekker root finding, fixed-point iteration, Levenberg-Marquardt curve fit, linear interpolation, Chebyshev approximation, finite differences and complex step, Richardson extrapolation, trapezoid and Simpson, Gauss-Legendre quadrature, Horner and synthetic division, CORDIC, Lanczos gamma, Euler and midpoint ODE solvers, RK4, symplectic Euler, 1D Poisson via Thomas algorithm, 1D heat equation with Crank-Nicolson, Cooley-Tukey FFT, and forward-mode autodiff with dual numbers.</p></div><div class="mini"><h3>What does not run here</h3><p>Production LAPACK, BLAS, SciPy, Eigen, GSL, FFTW, PETSc and other high-performance libraries. Also not included: implicit ODE solvers for stiff problems, adaptive RK with error control, multigrid, finite element methods, Broyden, Remez, Jenkins-Traub, Sturm sequences, Good-Thomas FFT, split-radix FFT, and sparse FFT. Use a vetted numerical library for real work.</p></div></div></section>
+<div class="panel"><div class="panel-head"><h2>Course map</h2><p>Pick a chapter. The path runs from floating-point basics to signal and large-scale methods.</p></div><div class="body"><div class="chapter-cards">${CHAPTERS.map((c,i)=>`<button class="chapter-card" data-chapter="${c.id}"><span class="num">CHAPTER ${String(i+1).padStart(2,'0')} · ${c.ids.length} LESSONS</span><strong>${esc(c.title.replace(/^\d+\\.\s*/,''))}</strong><p>${esc(c.desc)}</p></button>`).join('')}</div></div></div>
+<footer class="footer"><span>AZNUR Numerical Lab</span><span>Single file · no external runtime dependencies</span></footer>`;
+ $('#startFirst').onclick=()=>openLesson('ieee754');
+ $('#resumeLesson').onclick=()=>openLesson(state.current&&byId[state.current]?state.current:'ieee754');
+ $('#mainView').querySelectorAll('[data-chapter]').forEach(b=>b.onclick=()=>{const c=CHAPTERS.find(x=>x.id===b.dataset.chapter);if(c)openLesson(c.ids[0])});
+}
+
+function renderProgressPage(){
+ state.page='progress';
+ $('#mainView').innerHTML=`<div class="breadcrumb">Numerical Lab / Bookmarks & progress</div><header class="header"><div class="eyebrow">LOCAL ONLY</div><h1>Bookmarks and progress</h1><p>Your progress stays in this browser. Export the JSON to move it or keep a backup.</p></header>
+<section class="panel"><div class="panel-head"><h2>Completed lessons</h2></div><div class="body">${state.completed.size?`<div class="references">${[...state.completed].map(id=>`<a href="#${id}" data-open="${id}">${esc(byId[id].title)}</a>`).join('')}</div>`:'<p class="muted">No lessons marked complete yet.</p>'}</div></section>
+<section class="panel"><div class="panel-head"><h2>Bookmarks</h2></div><div class="body">${state.bookmarks.size?`<div class="references">${[...state.bookmarks].map(id=>`<a href="#${id}" data-open="${id}">${esc(byId[id].title)}</a>`).join('')}</div>`:'<p class="muted">No bookmarks yet.</p>'}</div></section>
+<section class="panel"><div class="panel-head"><h2>Progress data</h2></div><div class="body"><div class="header-actions" style="margin:0"><button class="btn primary" id="exportProgress">Export progress JSON</button><button class="btn" id="clearProgress">Clear completion marks</button></div><p class="muted" style="font-size:12.5px;margin-top:14px">Import accepts only known lesson IDs and a supported schema version.</p></div></section>`;
+ $('#mainView').querySelectorAll('[data-open]').forEach(a=>a.onclick=e=>{e.preventDefault();openLesson(a.dataset.open)});
+ $('#exportProgress').onclick=exportProgress;
+ $('#clearProgress').onclick=()=>{if(confirm('Clear all completion marks?')){state.completed.clear();save();renderProgressPage();renderTree();toast('Completion marks cleared')}};
+}
+
+function openLesson(id){if(!byId[id])return;renderLesson(id);renderTree();$('#mainView').focus({preventScroll:true});window.scrollTo(0,0)}
+function downloadText(name,text,type='text/plain'){const blob=new Blob([text],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),800)}
+function exportProgress(){downloadText('az-numerical-lab-progress.json',JSON.stringify({schemaVersion:1,completed:[...state.completed],bookmarks:[...state.bookmarks],theme:state.theme,current:state.current,drafts:state.drafts},null,2),'application/json');toast('Progress exported')}
+function importProgressFile(file){
+ if(file.size>2_000_000){toast('Import rejected: file too large');return}
+ const r=new FileReader();
+ r.onload=()=>{try{
+  const d=JSON.parse(r.result);
+  if(!d||d.schemaVersion!==1||!Array.isArray(d.completed)||!Array.isArray(d.bookmarks)||!d.drafts||typeof d.drafts!=='object'||Array.isArray(d.drafts))throw Error('bad schema');
+  if([...d.completed,...d.bookmarks].some(id=>typeof id!=='string'||!byId[id]))throw Error('unknown id');
+  state.completed=new Set(d.completed);
+  state.bookmarks=new Set(d.bookmarks);
+  state.theme=['system','light','dark'].includes(d.theme)?d.theme:'system';
+  state.current=byId[d.current]?d.current:null;
+  state.drafts=Object.fromEntries(Object.entries(d.drafts).filter(([k,v])=>byId[k]&&typeof v==='string'&&v.length<100000));
+  applyTheme();save();renderTree();
+  state.current?openLesson(state.current):renderHome();
+  toast('Progress imported');
+ }catch(e){toast('Import rejected: invalid progress data')}};
+ r.readAsText(file);
+}
+
+function bindGlobal(){
+ $('#themeSelect').onchange=()=>{state.theme=$('#themeSelect').value;applyTheme();save()};
+ $('#printBtn').onclick=()=>print();
+ $('#exportBtn').onclick=exportProgress;
+ $('#importBtn').onclick=()=>$('#importFile').click();
+ $('#importFile').onchange=e=>{if(e.target.files[0])importProgressFile(e.target.files[0]);e.target.value=''};
+ $('#searchInput').oninput=renderTree;
+ $('#chapterFilter').onchange=renderTree;
+ $('#homeLink').onclick=e=>{e.preventDefault();renderHome();history.replaceState(null,'','#home')};
+ $('#courseTree').onclick=e=>{const b=e.target.closest('[data-lesson]');if(b)openLesson(b.dataset.lesson)};
+ document.querySelectorAll('[data-page="home"]').forEach(b=>b.onclick=renderHome);
+ document.querySelectorAll('[data-page="progress"]').forEach(b=>b.onclick=renderProgressPage);
+ document.addEventListener('keydown',e=>{
+  if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){e.preventDefault();$('#searchInput').focus()}
+  if(e.key.toLowerCase()==='t'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){
+   state.theme=state.theme==='dark'?'light':state.theme==='light'?'system':'dark';
+   applyTheme();save();
+  }
+ });
+}
+
+function init(){
+ load();
+ applyTheme();
+ CHAPTERS.forEach(c=>{const op=document.createElement('option');op.value=c.id;op.textContent=c.title;$('#chapterFilter').append(op)});
+ bindGlobal();
+ renderTree();
+ const hash=location.hash.replace(/^#/,'');
+ if(hash&&byId[hash])renderLesson(hash);
+ else if(state.current&&byId[state.current])renderLesson(state.current);
+ else renderHome();
+ progress();
+}
+init();
+</script></body></html>
